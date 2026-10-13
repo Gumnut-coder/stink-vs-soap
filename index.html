@@ -276,7 +276,7 @@ const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 
 /* ---------------- Save ---------------- */
 const KEY='soapVsStink.v1';
-const DEF={voice:true,rate:'fast',voiceName:'',max:1,stars:{},bubbles:0,guide:{},up:{nozzle:0,sniffer:0,tank:0,suds:0,mint:0,mist:0,oil:0,vinegar:0,sugar:0,garlic:0,chilli:0,salt:0,bicarb:0},mute:false,seen:{},parent:false};
+const DEF={voice:true,rate:'fast',voiceName:'',max:1,stars:{},bubbles:0,guide:{},up:{nozzle:0,sniffer:0,tank:0,suds:0,mint:0,mist:0,oil:0,vinegar:0,sugar:0,garlic:0,chilli:0,salt:0,bicarb:0,hose:0,neem:0,kaolin:0,pyrethrum:0,power:0,sticky:0,pheromone:0,light:0,cardboard:0,dragonfly:0,mantis:0,assassin:0,wasp:0},mute:false,seen:{},parent:false};
 let save=load();
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')return Object.assign({},DEF,s,{guide:s.guide||{},up:Object.assign({},DEF.up,s.up||{}),stars:s.stars||{},seen:s.seen||{}});}catch(e){}return JSON.parse(JSON.stringify(DEF));}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){}}
@@ -295,8 +295,28 @@ const UPG=[
  {id:'garlic',spray:1,name:'Garlic Spray',unlock:55,desc:'Bugs hate the smell. Spray an area and every hidden bug there runs out into the open.',prices:[70,120,170],tiers:['2 sprays a level','3 sprays a level','4 sprays a level'],icon:'<svg viewBox="0 0 30 30"><path d="M10 9h10v17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2z" fill="#e9e2c8" stroke="#10261a" stroke-width="1.6"/><rect x="12" y="4" width="6" height="5" fill="#fff" stroke="#10261a" stroke-width="1.4"/><text x="15" y="21" font-size="7" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">GAR</text></svg>'},
  {id:'chilli',spray:1,name:'Chilli Spray',unlock:85,desc:'Spicy! Bugs in the area sneeze and freeze for 5 seconds, so they can\u2019t run or fly.',prices:[80,130,190],tiers:['2 sprays a level','3 sprays a level','4 sprays a level'],icon:'<svg viewBox="0 0 30 30"><path d="M10 9h10v17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2z" fill="#e5484d" stroke="#10261a" stroke-width="1.6"/><rect x="12" y="4" width="6" height="5" fill="#fff" stroke="#10261a" stroke-width="1.4"/><text x="15" y="21" font-size="7" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">CHI</text></svg>'},
  {id:'salt',spray:1,name:'Salt Shaker',unlock:120,desc:'Sprinkle an area to hurt every bug in it, even hidden ones. Salt is bad for plants, so the leaves there go brown.',prices:[90,150,210],tiers:['1 shake a level','2 shakes a level','3 shakes a level'],icon:'<svg viewBox="0 0 30 30"><path d="M10 9h10v17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2z" fill="#ffffff" stroke="#10261a" stroke-width="1.6"/><rect x="12" y="4" width="6" height="5" fill="#fff" stroke="#10261a" stroke-width="1.4"/><text x="15" y="21" font-size="7" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">SALT</text></svg>'},
+ {id:'power',name:'Power Nozzle',unlock:180,desc:'A high-pressure nozzle. Each soap spray has a chance to hit twice as hard.',prices:[120,200,300],tiers:['25% power shots','50% power shots','75% power shots'],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#9fe3ee" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">PWR</text></svg>'},
+ {id:'hose',spray:1,name:'Garden Hose',unlock:140,desc:'A strong jet of water knocks stink bugs off plants. Gardeners really do this! It blasts leaves open and hurts every bug in the area.',prices:[110,170,240,320,420],tiers:[],icon:'<svg viewBox="0 0 30 30"><path d="M10 9h10v17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2z" fill="#7fd0f0" stroke="#10261a" stroke-width="1.6"/><rect x="12" y="4" width="6" height="5" fill="#fff" stroke="#10261a" stroke-width="1.4"/><text x="15" y="21" font-size="7" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">HOSE</text></svg>'},
+ {id:'neem',spray:1,name:'Neem Oil',unlock:170,desc:'A natural oil from the seeds of the neem tree. It puts bugs off feeding: bugs in the area slow right down, and young nymphs are wiped out.',prices:[120,190,260,340,440],tiers:[],icon:'<svg viewBox="0 0 30 30"><path d="M10 9h10v17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2z" fill="#c7b25a" stroke="#10261a" stroke-width="1.6"/><rect x="12" y="4" width="6" height="5" fill="#fff" stroke="#10261a" stroke-width="1.4"/><text x="15" y="21" font-size="7" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">NEEM</text></svg>'},
+ {id:'kaolin',spray:1,name:'Kaolin Clay',unlock:210,desc:'Fruit growers spray this fine white clay so stink bugs avoid the plants. Coated leaves can\u2019t be used as hiding spots.',prices:[140,210,290,380,480],tiers:[],icon:'<svg viewBox="0 0 30 30"><path d="M10 9h10v17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2z" fill="#f2f0ea" stroke="#10261a" stroke-width="1.6"/><rect x="12" y="4" width="6" height="5" fill="#fff" stroke="#10261a" stroke-width="1.4"/><text x="15" y="21" font-size="7" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">CLAY</text></svg>'},
+ {id:'pyrethrum',spray:1,name:'Pyrethrum',unlock:260,desc:'Made from chrysanthemum flowers. It knocks out every bug in the area, even hidden ones, but it also kills good bugs. Hit a good bug and you lose a life!',prices:[160,240,330,430,550],tiers:[],icon:'<svg viewBox="0 0 30 30"><path d="M10 9h10v17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2z" fill="#f5a3c7" stroke="#10261a" stroke-width="1.6"/><rect x="12" y="4" width="6" height="5" fill="#fff" stroke="#10261a" stroke-width="1.4"/><text x="15" y="21" font-size="7" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">PYR</text></svg>'},
+ {id:'sticky',trap:1,name:'Sticky Trap',unlock:60,desc:'A yellow sticky card. Bugs that crawl onto it get stuck. Real sticky traps catch good bugs too, so place it away from ladybirds!',prices:[50,90,140,200,270],tiers:[],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#ffe14a" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">STK</text></svg>'},
+ {id:'pheromone',trap:1,name:'Pheromone Lure',unlock:110,desc:'Smells like a stink bug \u201ccome here\u201d message. Scientists use these to trap invasive bugs. It pulls stink bugs out of hiding from far away.',prices:[90,150,220,300,390],tiers:[],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#a7e07a" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">PHR</text></svg>'},
+ {id:'light',trap:1,name:'Light Trap',unlock:200,desc:'Many stink bugs fly towards lights at night. Super strong in dusk and night gardens, and it catches flying bugs too.',prices:[130,200,280,370,470],tiers:[],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#fff3a8" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">LIT</text></svg>'},
+ {id:'cardboard',trap:1,name:'Cardboard Roll',unlock:240,desc:'Brown Marmorated Stink Bugs love squeezing into tight, dark spots to hide. This roll lures them in from anywhere in the garden.',prices:[140,210,290,380,480],tiers:[],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#c9a06a" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">BOX</text></svg>'},
+ {id:'dragonfly',helper:1,name:'Dragonfly',unlock:80,desc:'Dragonflies are expert hunters that catch insects in mid-air. Release one and it zooms around catching bugs that are out in the open.',prices:[80,140,210,290,380],tiers:[],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#6fc3ff" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">DRG</text></svg>'},
+ {id:'mantis',helper:1,name:'Praying Mantis',unlock:130,desc:'Mantises sit perfectly still, then grab passing insects in a flash. In real life they eat good bugs too. In the game this one only catches stink bugs.',prices:[110,180,260,350,450],tiers:[],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#8fd16a" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">MNT</text></svg>'},
+ {id:'assassin',helper:1,name:'Assassin Bug',unlock:180,desc:'A hunter that walks over plants looking for pests, even under leaves. Real ones can bite people, so never pick one up!',prices:[130,200,280,370,470],tiers:[],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#d9774a" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#10261a" font-family="sans-serif" font-weight="900">ASN</text></svg>'},
+ {id:'wasp',helper:1,name:'Samurai Wasp',unlock:230,desc:'A tiny wasp scientists study as a natural way to control Brown Marmorated Stink Bugs. It sniffs out every hidden bug and freezes them for a few seconds.',prices:[150,230,320,420,530],tiers:[],icon:'<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="#4a4a4a;color:#fff" stroke="#10261a" stroke-width="1.6"/><text x="15" y="18.5" font-size="8" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-weight="900">WSP</text></svg>'},
 ];
 const SPRAYS={soap:{name:'Soap',col:'#3cc3d3',ink:'#08343a'},oil:{name:'Oil',col:'#e8a02a',ink:'#3a2405',ch:[0,2,4,6]},vinegar:{name:'Vinegar',col:'#efe7b8',ink:'#4a3d10',ch:[0,5,8,12]},sugar:{name:'Sugar',col:'#ffffff',ink:'#4a3a5a',ch:[0,1,2,3]},garlic:{name:'Garlic',col:'#e3dcc0',ink:'#4a4020',ch:[0,2,3,4]},chilli:{name:'Chilli',col:'#e5484d',ink:'#fff',ch:[0,2,3,4]},salt:{name:'Salt',col:'#f4f6f8',ink:'#33414d',ch:[0,1,2,3]},bicarb:{name:'Bicarb',col:'#efe9dc',ink:'#4a4030',ch:[0,1,2,3]}};
+Object.assign(SPRAYS,{hose:{name:'Hose',col:'#9adff5',ink:'#0b3a4a',ch:[0,1,2,3,4,5]},neem:{name:'Neem',col:'#d7c46a',ink:'#3a3010',ch:[0,1,2,3,4,5]},kaolin:{name:'Clay',col:'#f4f2ec',ink:'#4a4a40',ch:[0,1,2,3,4,5]},pyrethrum:{name:'Pyrethrum',col:'#f7b3d0',ink:'#5a1a35',ch:[0,1,2,3,4,5]},
+ sticky:{name:'Sticky',col:'#ffe14a',ink:'#4a3d00',ch:[0,1,2,3,4,5],kind:'trap'},pheromone:{name:'Lure',col:'#a7e07a',ink:'#20400a',ch:[0,1,2,3,4,5],kind:'trap'},light:{name:'Light',col:'#fff3a8',ink:'#4a4000',ch:[0,1,2,3,4,5],kind:'trap'},cardboard:{name:'Box roll',col:'#c9a06a',ink:'#3a2808',ch:[0,1,2,3,4,5],kind:'trap'},
+ dragonfly:{name:'Dragonfly',col:'#6fc3ff',ink:'#08304a',ch:[0,1,2,3,4,5],kind:'helper'},mantis:{name:'Mantis',col:'#8fd16a',ink:'#1a3a08',ch:[0,1,2,3,4,5],kind:'helper'},assassin:{name:'Assassin',col:'#d9774a',ink:'#3a1408',ch:[0,1,2,3,4,5],kind:'helper'},wasp:{name:'Wasp',col:'#555',ink:'#fff',ch:[0,1,2,3,4,5],kind:'helper'}});
+for(const k in SPRAYS){const c=SPRAYS[k].ch;if(c&&c.length===4){const d=c[3]-c[2]||1;c.push(c[3]+d,c[3]+2*d);}}
+for(const u of UPG){if((u.spray||u.trap||u.helper)&&SPRAYS[u.id]){while(u.prices.length<5)u.prices.push(Math.round(u.prices[u.prices.length-1]*1.4/10)*10);const unit=u.trap?' to place':u.helper?' to release':'';u.tiers=SPRAYS[u.id].ch.slice(1).map(n=>n+(u.trap?(n===1?' trap':' traps'):u.helper?(n===1?' helper':' helpers'):' uses')+' a level');}}
+const KIND=k=>SPRAYS[k]&&SPRAYS[k].kind||'spray';
+const POWER=[0,.25,.5,.75];
 const SPECIES={
  gvb:{short:'Australia\u2019s most common garden stink bug. It loves beans and tomatoes.',name:'Green Vegetable Bug',from:1,col:['#5fb53a','#6cc244','#55a832'],r:1,hp:0,w:3,
   fact:'One of the most common garden bugs in Australia. It sucks juice from tomatoes and beans, and its bright green body hides it on leaves.',
@@ -336,9 +356,14 @@ const GOODBUGS={
  bee:{short:'Carries pollen so plants can make fruit and seeds.',name:'Bee',from:8,fact:'Bees carry pollen from flower to flower, which helps plants make fruit and seeds.'},
  butterfly:{short:'Sips nectar and pollinates flowers as it goes.',name:'Butterfly',from:15,fact:'Butterflies sip nectar and pollinate flowers as they go.'},
  lacewing:{short:'Green like a stink bug, but with see-through wings. Its babies eat pests!',name:'Lacewing',from:40,fact:'Green like a stink bug, but with big see-through wings. Its babies are called aphid lions because they gobble pests.'},
+ dragonfly:{name:'Dragonfly',from:80,helper:1,short:'An expert hunter that catches insects in mid-air.',fact:'Dragonflies catch insects in mid-air and can eat hundreds a day. Their babies live underwater in ponds.'},
+ mantis:{name:'Praying Mantis',from:130,helper:1,short:'Sits still, then grabs passing insects in a flash.',fact:'A patient ambush hunter. In real gardens mantises also eat good bugs, so gardeners have mixed feelings about them.'},
+ assassin:{name:'Assassin Bug',from:180,helper:1,short:'Hunts pests on plants. Never pick one up: it can bite!',fact:'Assassin bugs hunt caterpillars and other pests on plants. They can give people a painful bite, so look but don\u2019t touch.'},
+ wasp:{name:'Samurai Wasp',from:230,helper:1,short:'A tiny wasp studied as a natural way to control invasive stink bugs.',fact:'This tiny wasp lays its eggs inside stink bug eggs. Scientists study it as a natural way to control Brown Marmorated Stink Bugs.'},
  predator:{short:'Looks like a stink bug, but it hunts caterpillars. Check its pointy shoulders!',name:'Spined Predatory Shield Bug',from:70,fact:'Looks like a stink bug, but it is a garden hero that hunts caterpillars and other pests. Look for its pointy shoulders and mottled brown back.'},
 };
 var GEN={lemon:genLemon,bean:genBean,sunflower:genSunflower,hibiscus:genHibiscus,wattle:genWattle,corn:genCorn,succulent:genSucculent,lily:genLily,tomato:genTomato,rose:genRose,monstera:genMonstera,fern:genFern};
+const MAXLV=400;
 const NOZ=[0,10,20,30], SNIFF_CD=[0,20,14,9], CLOUD=[3,2.2,1.5,1.0];
 
 /* ---------------- Audio ---------------- */
@@ -379,20 +404,20 @@ function params(lev){
  if(st===1){p.bugs=1+Math.floor((lev-1)/7);p.peek=lev<=3?1:Math.max(.1,.85-(lev-4)*.018);p.bugR=21-(lev/49)*4;}
  else if(st===2){p.bugs=6+Math.floor((lev-50)/8);p.peek=.1;p.bugR=15;p.timed=true;p.time=cl(Math.round(15+p.bugs*4),45,70);p.reloc=1;p.react=Math.max(1,1.6-(lev-50)*.012);p.speed=200;}
  else if(st===3){p.bugs=12+Math.floor((lev-100)/10);p.peek=.05;p.bugR=13.5;p.timed=true;p.time=cl(Math.round(15+p.bugs*3.5),55,75);p.reloc=2;p.react=.95;p.speed=240;p.scouts=Math.min(4,1+Math.floor((lev-100)/15));}
- else{p.bugs=16+Math.floor((lev-150)/10);p.peek=0;p.bugR=12;p.timed=true;p.time=cl(Math.round(15+p.bugs*3),60,80);p.reloc=2;p.react=.8;p.speed=290;p.scouts=Math.min(4,2+Math.floor((lev-150)/20));p.nymphs=Math.min(3,1+Math.floor((lev-150)/17));p.wind=true;}
+ else{p.bugs=Math.min(30,16+Math.floor((lev-150)/10));p.peek=0;p.bugR=12;p.timed=true;p.time=cl(Math.round(15+p.bugs*3),60,lev>=200?100:80);p.reloc=2;p.react=.8;p.speed=290;p.scouts=Math.min(4,2+Math.floor((lev-150)/20));p.nymphs=Math.min(lev>=250?5:3,1+Math.floor((lev-150)/17));p.wind=true;}
  // Wandering: from level 5 bugs crawl to new hiding spots on their own, more often and faster as levels rise
  // Higher levels: bugs shrink, crawl faster, wander more often and take more sprays
  p.bugR=Math.max(9.5,21-lev*.058);
  p.wander=Math.max(1.8,7.5-lev*.03);
- p.wspd=55+lev*1.0;
- p.speed=Math.max(p.speed,120+lev*1.1);
+ p.wspd=Math.min(260,55+lev*1.0);
+ p.speed=Math.min(420,Math.max(p.speed,120+lev*1.1));
  p.hp=lev<70?1:lev<140?2:3;
  if(p.hp>1&&p.timed)p.time=Math.round(p.time+p.bugs*(p.hp-1)*2.5);
  p.wrange=lev<20?300:lev<50?450:650;
- p.friends=lev<10?1:lev<30?2:lev<80?3:lev<150?4:5;
+ p.friends=lev<10?1:lev<30?2:lev<80?3:lev<150?4:lev<250?5:6;
  p.tank=lev>=60;
  p.queen=false;p.boss=lev>=10&&lev%10===0;
- p.shell=p.boss?2+Math.floor(lev/50):0;p.bossHp=p.boss?2+Math.floor(lev/50):0;
+ p.shell=p.boss?Math.min(6,2+Math.floor(lev/50)):0;p.bossHp=p.boss?Math.min(7,2+Math.floor(lev/50)):0;
  Object.assign(p,scene(lev));
  return p;
 }
@@ -401,10 +426,10 @@ function scene(lev){
  if(window.__svsForce)return window.__svsForce;
  const r=Math.random;const pick=a=>a[Math.floor(r()*a.length)];
  const mix=(pool,n)=>{const out=[];let last='';for(let i=0;i<n;i++){let k;do{k=pick(pool);}while(k===last&&pool.length>1);out.push(k);last=k;}return out;};
- const n=lev<10?1:lev<20?2:lev<50?2+(r()<.5?1:0):lev<100?3+(r()<.4?1:0):lev<150?3+(r()<.6?1:0):4+(r()<.5?1:0);
+ const n=lev<10?1:lev<20?2:lev<50?2+(r()<.5?1:0):lev<100?3+(r()<.4?1:0):lev<150?3+(r()<.6?1:0):lev<200?4+(r()<.5?1:0):4+(r()<.6?1:0);
  const outdoor=lev<5?false:r()<Math.min(.8,.35+lev*.004);
  if(!outdoor)return{bg:1,ground:'pot',outdoor:false,plants:mix(lev<10?['succulent','lily','lemon']:['succulent','lily','monstera','fern','lemon','hibiscus'],n)};
- const bg=lev<60?2:pick(lev<120?[2,2,3,4]:[2,3,4,4]);
+ const bg=lev<60?2:lev<200?pick(lev<120?[2,2,3,4]:[2,3,4,4]):pick([2,3,4,5,5]);
  const pool=bg===3?['monstera','fern','lily','hibiscus','rose']:['tomato','rose','lily','fern','monstera','lemon','bean','sunflower','hibiscus','wattle','corn'];
  return{bg,ground:lev<40||r()<.35?'pot':'bed',outdoor:true,plants:mix(pool,n)};
 }
@@ -413,6 +438,8 @@ const STAGES=[
  {n:2,name:'Backyard',range:[50,99],note:'The timer starts. Garden beds of tomatoes, roses and lilies. Uncovered bugs scurry away.'},
  {n:3,name:'Tropical Garden',range:[100,149],note:'Deep shadows, monsteras and ferns, and Scout bugs that fly between plants.'},
  {n:4,name:'Dusk Garden',range:[150,200],note:'Dark, windy and swarming. Up to five plants, and nymph clusters hide together.'},
+ {n:5,name:'Night Garden',range:[201,300],note:'Moonlit gardens and bigger swarms. Light traps work best at night.'},
+ {n:6,name:'Mega Garden',range:[301,400],note:'The toughest gardens of all. Bring every spray, trap and helper you have.'},
 ];
 
 /* ---------------- Plant generators ---------------- */
@@ -565,12 +592,12 @@ function covered(x,y){return coveredIn(G.covers,x,y);}
 const WX={sun:{cloud:0,rain:0,wind:0,label:'Sunny'},cloudy:{cloud:.8,rain:0,wind:.15,label:'Cloudy'},rain:{cloud:.9,rain:1,wind:.25,label:'Rain'},wind:{cloud:.3,rain:0,wind:1,label:'Windy'},storm:{cloud:1,rain:1,wind:1,label:'Storm'}};
 const WXMSG={sun:'The sun is out!',cloudy:'Clouds are rolling in.',rain:'It\u2019s raining! Rain fills your soap bottle faster.',wind:'Windy! Gusts blow the leaves open.',storm:'Storm! Wind and rain at once.'};
 function pickWeather(prev,lev){const pool=['sun','sun','cloudy','rain','wind'];if(lev>=60)pool.push('storm');let k;do{k=pool[Math.floor(Math.random()*pool.length)];}while(k===prev);return k;}
-function newWeather(P){const w={kind:'sun',cloud:0,rain:0,wind:P.bg===4?.35:0,next:14+Math.random()*10,gust:4,flash:0,drops:[]};
+function newWeather(P){const w={kind:'sun',cloud:0,rain:0,wind:P.bg>=4?.35:0,next:14+Math.random()*10,gust:4,flash:0,drops:[]};
  if(P.outdoor){w.kind=pickWeather('',P.lev);const t=WX[w.kind];w.cloud=t.cloud;w.rain=t.rain;w.wind=Math.max(w.wind,t.wind);}
  for(let i=0;i<220;i++)w.drops.push({x:Math.random(),y:Math.random(),v:.9+Math.random()*.5});return w;}
 function updWeather(dt){const w=G.weather;if(!G.P.outdoor)return;
  if(!G.demo&&!G.paused){w.next-=dt;if(w.next<=0){w.next=14+Math.random()*12;w.kind=pickWeather(w.kind,G.lev);toast(WXMSG[w.kind]);}}
- const t=WX[w.kind],k=Math.min(1,dt*.6);w.cloud+=(t.cloud-w.cloud)*k;w.rain+=(t.rain-w.rain)*k;w.wind+=(Math.max(t.wind,G.P.bg===4?.35:0)-w.wind)*k;
+ const t=WX[w.kind],k=Math.min(1,dt*.6);w.cloud+=(t.cloud-w.cloud)*k;w.rain+=(t.rain-w.rain)*k;w.wind+=(Math.max(t.wind,G.P.bg>=4?.35:0)-w.wind)*k;
  for(const d of w.drops){d.y+=dt*d.v*1.6;d.x-=dt*.12*w.wind;if(d.y>1){d.y-=1;d.x=Math.random();}if(d.x<0)d.x+=1;}
  if(w.flash>0)w.flash-=dt*2.5;
  if(w.kind==='storm'&&Math.random()<dt*.12)w.flash=1;
@@ -580,10 +607,13 @@ function initCharges(P){const c={};for(const k in SPRAYS){if(k==='soap')continue
 function leafPoint(c,r){const t=.3+r()*.5,l=(r()-.5)*.5;const ca=Math.cos(c.a0+(c.off||0)),sa=Math.sin(c.a0+(c.off||0));return{x:c.bx+ca*t*c.len-sa*l*c.cw/2,y:c.by+sa*t*c.len+ca*l*c.cw/2};}
 
 function buildLevel(lev,demo){
- const P=params(lev);const rng=mulberry32(lev*7919+13+Math.floor(Math.random()*1e6));const st=P.st,dusk=P.bg===4;
+ const P=params(lev);const rng=mulberry32(lev*7919+13+Math.floor(Math.random()*1e6));const st=P.st,dusk=P.bg>=4;
  const B={covers:[],stems:[],decor:[],
   addCover(c){c.off=0;c.vel=0;c.hold=0;c.sway=0;c.ph=rng()*TAU;c.cw=c.cw||c.w*(c.cwf||1);c.depth=c.depth||0;const pal=PAL[c.type];c.col=pal[Math.floor(rng()*pal.length)];if(dusk)c.col=shade(c.col,-.12);this.covers.push(c);return c;},
   stem(pts,w,col){this.stems.push({pts,w,col:dusk?shade(col,-.2):col});}};
+ if(!demo||true){const asp=(window.innerWidth||1024)/Math.max(300,(window.innerHeight||768)-130);const gp=P.ground==='pot'?470:400;const want=Math.max(1,Math.min(7,Math.round(asp*1000/gp)));
+  const pool=P.outdoor?(P.bg===3?['monstera','fern','lily','hibiscus','rose']:['tomato','rose','lily','fern','monstera','lemon','bean','sunflower','hibiscus','wattle','corn']):['succulent','lily','monstera','fern','lemon','hibiscus'];
+  P.plants=(P.plants||['fern']).slice();while(P.plants.length<want)P.plants.push(pool[Math.floor(Math.random()*pool.length)]);}
  const n=P.plants.length;
  const nT=st===1?Math.max(9,P.bugs*2+7):st===2?P.bugs*2+6:st===3?Math.round(P.bugs*1.3+6):Math.round(P.bugs*1.5+8);
  const perPlant=Math.max(16,Math.round(Math.ceil(nT/n)*1.6+4));
@@ -603,6 +633,24 @@ function buildLevel(lev,demo){
    B.addCover({type:'tuft',bx:tx,by:baseY+4,a0:-Math.PI/2+(rng()-.5)*.25,len:95+rng()*35,w:95+rng()*20,cwf:.9,depth:-15+rng()*5});}}
  });
  B.worldX=[xs[0]-gap*.6,xs[n-1]+gap*.6];
+ // decorative backdrop so greenery fills the whole scene
+ B.back=[];{const gy=P.ground==='pot'?930:850;const x0=B.worldX[0]-1400,x1=B.worldX[1]+1400;const shade0=P.bg>=4?-.45:P.bg===3?-.25:-.1;
+  const greens=['#3f8f3a','#4a9a40','#367f33','#5aa548'];
+  if(P.outdoor){for(let x=x0;x<x1;x+=150+rng()*120){if(rng()<.35){B.back.push({t:'tree',x,y:gy-40,h:380+rng()*220,r:130+rng()*70,col:shade(greens[Math.floor(rng()*4)],shade0-.12)});}}}
+  for(let x=x0;x<x1;x+=60+rng()*50)B.back.push({t:'bush',x,y:gy-20-rng()*30,r:70+rng()*60,col:shade(greens[Math.floor(rng()*4)],shade0),fl:P.outdoor&&rng()<.35?['#f2c94c','#e2384d','#f06a8a','#ffffff','#b37bd6'][Math.floor(rng()*5)]:null});
+  if(!P.outdoor){for(let x=x0;x<x1;x+=300+rng()*200)B.back.push({t:'pot',x,y:gy-10,r:55+rng()*25,col:shade(greens[Math.floor(rng()*4)],-.05)});}
+  B.beam=-430;for(let x=x0+rng()*200;x<x1;x+=360+rng()*220)B.back.push({t:'hang',x,y:-230+rng()*90,r:62+rng()*22,col:shade(greens[Math.floor(rng()*4)],shade0*.6),fl:rng()<.5?['#f06a8a','#ffffff','#b37bd6','#f2c94c'][Math.floor(rng()*4)]:null,n:5+Math.floor(rng()*4),sd:rng()*9});}
+ // real hanging baskets and gum trees that bugs can hide in
+ {let topY=1e9;for(const c of B.covers){if(c.type==='fallen'||c.type==='tuft')continue;const t=c.by+Math.sin(c.a0)*c.len-c.cw/2;if(t<topY)topY=t;}
+  topY=Math.max(-60,Math.min(260,topY));const gy=P.ground==='pot'?930:850;const greens=['#3f8f3a','#4a9a40','#367f33','#5aa548'];
+  const mids=[];for(let i=0;i<n-1;i++)mids.push((xs[i]+xs[i+1])/2);if(n<=2){mids.push(xs[0]-gap*.45);mids.push(xs[n-1]+gap*.45);}
+  mids.forEach((mx,i)=>{const tree=P.outdoor&&i%2===1;
+   if(tree){const cy=topY+10;const cl=[[-120,30],[-55,-35],[25,-55],[100,-20],[140,45],[-10,25],[70,40]];B.back.push({t:'gum',x:mx,y0:gy-20,y1:cy+70,w:26,cl:cl.map(([dx,dy])=>[mx+dx,cy+dy])});
+    for(const[dx,dy]of cl)for(let k=0;k<5;k++){const a=Math.PI/2+(k-2)*.55+(rng()-.5)*.3;B.addCover({type:'wattle',bx:mx+dx+(rng()-.5)*30,by:cy+dy-30+(rng()-.5)*16,a0:a,len:95+rng()*30,w:40+rng()*8,cwf:.95,depth:-30+rng()*4,tree:1});}}
+   else{const yb=topY-50,r=88;B.back.push({t:'hang',real:1,x:mx,y:yb,r,col:shade(greens[Math.floor(rng()*4)],-.05),fl:rng()<.6?['#f06a8a','#ffffff','#b37bd6','#f2c94c'][Math.floor(rng()*4)]:null,n:0,sd:rng()*9});
+    for(let k=0;k<7;k++){const a=Math.PI/2+(k-3)*.32+(rng()-.5)*.1;B.addCover({type:'fern',bx:mx+(k-3)*20,by:yb-8,a0:a,len:165+rng()*55,w:110,cwf:.75,depth:-25+rng()*3,hang:1});}
+    for(let k=0;k<4;k++){const a=-Math.PI/2+(k-1.5)*.55;B.addCover({type:'fern',bx:mx+(k-1.5)*26,by:yb-r*.3,a0:a,len:95+rng()*25,w:90,cwf:.75,depth:-26,hang:1});}}});
+  B.back=B.back.filter(o=>o.t!=='hang'||o.real||o.x<B.worldX[0]-120||o.x>B.worldX[1]+120);}
  B.covers.sort((a,b)=>a.depth-b.depth);
  B.covers.forEach(refreshCover);
  // hiding spots
@@ -610,10 +658,11 @@ function buildLevel(lev,demo){
  for(const c of B.covers){const small=c.type==='fruit'||c.type==='rose'||c.type==='spathe'||c.type==='lemon'||c.type==='pod'||c.type==='puff'||c.type==='cob';const cap=small?1:Math.max(1,Math.min(6,Math.floor(c.len*c.cw/9000)));
   for(let k=0;k<cap;k++)for(let tr=0;tr<24;tr++){const t=.22+rng()*.6,l=(rng()-.5)*.85;const ca=Math.cos(c.a0),sa=Math.sin(c.a0);
    const x=c.bx+ca*t*c.len-sa*l*c.cw/2,y=c.by+sa*t*c.len+ca*l*c.cw/2;
-   if(y<60||y>965)continue;if(spots.some(s=>Math.hypot(s.x-x,s.y-y)<minD))continue;
+   if(y<-300||y>965)continue;if(spots.some(s=>Math.hypot(s.x-x,s.y-y)<minD))continue;
    {const q=P.bugR*1.05;if(!coveredIn(B.covers,x+q,y)||!coveredIn(B.covers,x-q,y)||!coveredIn(B.covers,x,y+q)||!coveredIn(B.covers,x,y-q))continue;}
-   spots.push({x,y,occ:null});break;}}
+   spots.push({x,y,occ:null,up:!!(c.hang||c.tree)});break;}}
  for(let i=spots.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[spots[i],spots[j]]=[spots[j],spots[i]];}
+ {const ups=spots.filter(s=>s.up);if(ups.length&&lev>=3){const k=Math.min(ups.length,Math.max(1,Math.round(P.bugs*.3)));const front=ups.slice(0,k);const rest=spots.filter(s=>!front.includes(s));spots.length=0;spots.push(...front,...rest);}}
  const free=()=>spots.filter(s=>!s.occ);
  const bugs=[];
  const up=save.up;
@@ -639,7 +688,7 @@ function buildLevel(lev,demo){
   if(kind==='nymphs'){const f=free();const s=f.length?f[0]:spots[0];s.occ='cluster';for(let j=0;j<3;j++){const b=mk('nymph',s.x+Math.cos(j*2.1)*9,s.y+Math.sin(j*2.1)*9);b.spot=s;}continue;}
   if(kind==='stink'&&rng()<P.peek){let placed=false;
    for(let tr=0;tr<40&&!placed;tr++){const c=leafy[Math.floor(rng()*leafy.length)];const ext=lev<=10?1+P.bugR*.9/c.len:.98+P.bugR*.3/c.len;const ca=Math.cos(c.a0),sa=Math.sin(c.a0);const x=c.bx+ca*c.len*ext,y=c.by+sa*c.len*ext;
-    if(y<60||y>965)continue;if(coveredIn(B.covers,x,y))continue;
+    if(y<-300||y>965)continue;if(coveredIn(B.covers,x,y))continue;
     if(lev<=10&&coveredIn(B.covers,x+ca*P.bugR*.8,y+sa*P.bugR*.8))continue;if(bugs.some(b=>Math.hypot(b.x-x,b.y-y)<minD))continue;
     const b=mk('stink',x,y);b.ang=c.a0+Math.PI/2;b.peek=true;placed=true;}
    if(placed)continue;}
@@ -652,9 +701,9 @@ function buildLevel(lev,demo){
  const g={lev,P,covers:B.covers,stems:B.stems,decor:B.decor,spots,bugs:demo?[]:bugs,friends:demo?[]:friends,leafy,particles:[],puffs:[],rings:[],t:0,
   timeLeft:P.time,lives:3,stinks:0,misses:0,ladyHits:0,hits:0,soapMax:P.tank?8+4*up.tank+4*(P.hp-1):0,regen:(up.suds>=2?.8:1.2)/(1+.5*(P.hp-1)),soap:0,
   sniffCd:0,sniffT:0,mist:[0,1,2,3][up.mist],mistArmed:false,cloudDur:CLOUD[up.mint],cloudT:0,stinkAnim:null,winT:-1,failT:-1,over:false,hintT:0,
-  weather:newWeather(P),sprayType:'soap',charges:initCharges(P),baits:[],splats:[],spray:null,demo:!!demo,paused:false,lastTick:99,
+  weather:newWeather(P),sprayType:'soap',charges:initCharges(P),baits:[],splats:[],traps:[],helpers:[],spray:null,demo:!!demo,paused:false,lastTick:99,
   cloudBlobs:Array.from({length:18},()=>({x:Math.random(),y:Math.random(),r:.22+Math.random()*.3,p:Math.random()*TAU})),
-  flies:dusk?Array.from({length:14+n*4},()=>({x:rand(B.worldX[0],B.worldX[1]),y:rand(220,880),vx:rand(-20,20),vy:rand(-12,12),p:rand(0,TAU)})):[]};
+  back:B.back,flies:dusk?Array.from({length:14+n*4},()=>({x:rand(B.worldX[0],B.worldX[1]),y:rand(220,880),vx:rand(-20,20),vy:rand(-12,12),p:rand(0,TAU)})):[]};
  g.soap=g.soapMax;g.wx=B.worldX;for(const b of g.bugs)b.hpMax=b.hp;g.floaters=[];
  return g;
 }
@@ -707,21 +756,111 @@ function tap(x,y){
  if(T!=='soap'){if(!(G.charges[T]>0)){toast('Out of '+SPRAYS[T].name+'. Back to Soap.');setSpray('soap');return;}G.charges[T]--;refreshSprayBar();}
  else if(G.soapMax>0){if(G.soap<1){SFX.click();toast('Out of soap. The bottle refills in a moment.');return;}G.soap-=1;}
  G.spray={x,y,t:0,col:SPRAYS[T].col};SFX.spray();
- if(T==='sugar'||T==='garlic'||T==='chilli'||T==='salt'||T==='bicarb'){areaSpray(T,x,y);if(T!=='soap'&&G.charges[T]<=0)setSpray('soap');return;}
+ if(KIND(T)==='trap'){placeTrap(T,x,y);if(G.charges[T]<=0)setSpray('soap');return;}
+ if(KIND(T)==='helper'){releaseHelper(T,x,y);if(G.charges[T]<=0)setSpray('soap');return;}
+ if(T==='sugar'||T==='garlic'||T==='chilli'||T==='salt'||T==='bicarb'||T==='hose'||T==='neem'||T==='kaolin'||T==='pyrethrum'){areaSpray(T,x,y);if(T!=='soap'&&G.charges[T]<=0)setSpray('soap');return;}
  let best=null,bd=1e9;
  for(const b of G.bugs){if(b.state==='dead'||b.state==='stinking'||b.state==='gone')continue;const ok=b.kind==='boss'||b.state==='fly'||b.state==='crawl'||b.state==='eat'||!covered(b.x,b.y);if(!ok)continue;const d=Math.hypot(b.x-x,b.y-y);if(d<hitR(b)&&d<bd){bd=d;best=b;}}
  let friend=null;
  for(const f of G.friends){if(f.gone)continue;const p=friendPos(f);const d=Math.hypot(p.x-x,p.y-y);if(d<Math.max(18,minTouch()*.85)&&d<bd){bd=d;friend=f;best=null;}}
- if(best){damage(best,T==='vinegar'?2:T==='oil'&&best.kind!=='boss'?99:1,T);G.hintT=0;G.hits++;}
+ if(best){let dmg=T==='vinegar'?2:T==='oil'&&best.kind!=='boss'?99:1;if(T==='soap'&&Math.random()<POWER[save.up.power||0]){dmg=2;floater(best.x,best.y-best.r*2.4,'POWER!','#9fe3ee');}damage(best,dmg,T);G.hintT=0;G.hits++;}
  else if(friend){friend.gone=true;G.ladyHits++;SFX.oops();particles(x,y,10,'drop');loseLife('Oops! You sprayed '+FNAME[friend.kind]+'. Good bugs help the garden.');}
  else{G.misses++;SFX.miss();particles(x,y,6,'drop');const c=topCoverAt(x,y);if(c){c.vel+=(Math.random()<.5?-1:1)*2.2;if(T==='vinegar')brown(c);}
   if(G.P.st>=2){const chance=G.P.st===4?.8:.5;for(const b of G.bugs){if(b.state!=='hidden'||b.relocLeft<=0||b.kind==='nymph')continue;if(Math.hypot(b.x-x,b.y-y)<170&&Math.random()<chance)relocate(b,true);}}}
 }
 const OILC='#e8a02a';
 function splat(b){if(G.fresh>0){toast('The bicarb soaked up the squirt!');return;}G.splats.push({x:OX+b.x*S,y:OY+b.y*S,t:2.6,r:70+Math.random()*40,seed:Math.random()*TAU});toast('Squirt! The Bronze Orange Bug fired stink juice at you!');}
+function newSpray(T,x,y,R){
+ for(let i=0;i<26;i++)particles(x+rand(-R*.7,R*.7),y+rand(-R*.7,R*.7),1,T==='hose'?'drop':'mist');SFX.mist();
+ let n=0;
+ if(T==='hose'){for(const c of G.covers){if(Math.hypot(c.cx-x,c.cy-y)<R*1.1&&c.type!=='fallen'){c.off=(c.cx<x?-1:1)*1.3;c.hold=1.6;c.vel=0;refreshCover(c);}}
+  for(const b of alive()){if(b.state==='stinking'||Math.hypot(b.x-x,b.y-y)>R)continue;n++;damage(b,1,'hose');if(b.state!=='dead'&&b.kind!=='nymph'&&b.kind!=='boss'){b.stun=0;wander(b);}}
+  toast(n?'Whoosh! The hose blasted '+n+(n===1?' bug.':' bugs.'):'Whoosh! No bugs there.');}
+ else if(T==='neem'){for(const b of alive()){if(b.state==='stinking'||Math.hypot(b.x-x,b.y-y)>R)continue;n++;if(b.kind==='nymph')damage(b,99,'neem');else b.slow=12;}
+  toast(n?'Neem oil! '+n+(n===1?' bug slows':' bugs slow')+' right down.':'No bugs there.');}
+ else if(T==='kaolin'){for(const c of G.covers)if(Math.hypot(c.cx-x,c.cy-y)<R)c.clay=true;for(const sp of G.spots)if(!sp.occ&&Math.hypot(sp.x-x,sp.y-y)<R)sp.occ='clay';
+  for(const b of alive()){if(b.state!=='hidden'||b.kind==='nymph'||b.kind==='boss'||Math.hypot(b.x-x,b.y-y)>R)continue;n++;wander(b);if(b.state!=='crawl')relocate(b,false);}
+  toast('Clay coat! Bugs can\u2019t hide on white leaves.'+(n?' '+n+(n===1?' bug runs':' bugs run')+' out.':''));}
+ else if(T==='pyrethrum'){let lost=0;for(const f of G.friends){if(f.gone)continue;const fp=friendPos(f);if(Math.hypot(fp.x-x,fp.y-y)<R){f.gone=true;lost++;}}
+  for(const h of G.helpers)if(h.t>0&&Math.hypot(h.x-x,h.y-y)<R)h.t=0;
+  for(const b of alive()){if(b.state==='stinking'||Math.hypot(b.x-x,b.y-y)>R)continue;n++;damage(b,b.kind==='boss'?1:99,'pyre');}
+  if(lost){loseLife('Pyrethrum hurt '+(lost===1?'a good bug':lost+' good bugs')+' too! It kills helpers as well as pests.');}else toast(n?'Pyrethrum knocked out '+n+(n===1?' bug.':' bugs.'):'No bugs there.');}
+}
+function placeTrap(T,x,y){const cfg={sticky:{lure:240,cap:3,catchR:45},pheromone:{lure:460,cap:5,catchR:40},light:{lure:G.P.bg>=4?720:270,cap:6,catchR:55},cardboard:{lure:1100,cap:6,catchR:40}}[T];
+ G.traps.push(Object.assign({k:T,x,y,caught:0,t:0},cfg));SFX.buy();
+ toast({sticky:'Sticky trap set. Keep good bugs away from it!',pheromone:'Pheromone lure set. Stink bugs can smell it from far away.',light:G.P.bg>=4?'Light trap on. Bugs fly to the light at night!':'Light trap on. It works best at night.',cardboard:'Cardboard roll set. Brown Marmorated Stink Bugs love hiding in it.'}[T]);}
+function trapCatch(tr,b){if(b.state==='dead'||b.state==='gone')return;tr.caught++;b.toTrap=null;release(b);b.state='dead';b.deadT=0;b.bx0=tr.x+(Math.random()-.5)*18;b.by0=tr.y+(Math.random()-.5)*14;b.bvx=0;b.bvy=0;b.spin=0;b.trapped=true;SFX.pop();floater(tr.x,tr.y-40,tr.k==='light'?'ZAPPED!':'STUCK!','#ffe066');G.hits++;
+ if(!alive().length&&G.winT<0&&G.failT<0)G.winT=.9;}
+function updTraps(dt){const P=G.P;
+ for(const tr of G.traps){tr.t+=dt;if(tr.caught>=tr.cap)continue;
+  for(const b of G.bugs){if(tr.caught>=tr.cap)break;if(b.kind==='boss'||b.state==='dead'||b.state==='gone'||b.state==='stinking')continue;
+   const d=Math.hypot(b.x-tr.x,b.y-tr.y);
+   if(d<tr.catchR&&(b.state!=='hidden'||tr.k!=='light')){trapCatch(tr,b);continue;}
+   if(tr.k==='light'&&b.state==='fly'&&d<tr.catchR+20){trapCatch(tr,b);continue;}
+   const lured=tr.k==='cardboard'?b.sp==='bmsb'&&d<tr.lure:d<tr.lure;
+   if(lured&&(b.state==='hidden'||b.state==='eat')&&!b.toTrap&&b.kind!=='nymph'&&Math.random()<dt*(tr.k==='sticky'?.4:.7)){release(b);b.toTrap=tr;b.toBait=false;b.tx=tr.x;b.ty=tr.y;b.state='crawl';b.spd=Math.max(80,P.wspd*.8);b.peek=false;}}
+  if(tr.k==='sticky')for(const f of G.friends){if(!f.gone&&!FLIER[f.kind]&&Math.hypot(f.x-tr.x,f.y-tr.y)<tr.catchR){f.gone=true;toast('Oh no! Sticky traps catch good bugs too.');}}}
+}
+const HELP_LIFE={dragonfly:22,mantis:999,assassin:30,wasp:9};
+function releaseHelper(T,x,y){if(!save.guide['good:'+T]){save.guide['good:'+T]=1;persist();}const h={k:T,x,y,tx:x,ty:y,t:HELP_LIFE[T],cd:1,ang:0,ph:Math.random()*TAU,strike:0};
+ if(T==='dragonfly'){const tp=bottleTip();h.x=(tp.x-OX)/S;h.y=(tp.y-OY)/S;}
+ if(T==='wasp'){G.sniffT=Math.max(G.sniffT,8);let n=0;for(const b of alive())if(b.state==='hidden'&&b.kind!=='boss'){b.stun=6;n++;}toast('Samurai wasp! It found '+n+(n===1?' hidden bug':' hidden bugs')+' and froze them.');}
+ G.helpers.push(h);SFX.sniff();
+ if(T==='dragonfly')toast('Dragonfly released! It catches bugs out in the open.');if(T==='mantis')toast('Praying mantis ready. It grabs any bug that comes close.');if(T==='assassin')toast('Assassin bug released! It hunts under the leaves too.');}
+function exposed(b){return b.state==='crawl'||b.state==='eat'||b.state==='fly'||(b.state==='hidden'&&!covered(b.x,b.y));}
+function updHelpers(dt){
+ for(const h of G.helpers){if(h.t<=0)continue;h.t-=dt;h.cd-=dt;if(h.strike>0)h.strike-=dt;
+  const live=G.bugs.filter(b=>b.state!=='dead'&&b.state!=='gone'&&b.state!=='stinking');
+  if(h.k==='dragonfly'||h.k==='assassin'||h.k==='wasp'){
+   let tgt=null,bd=1e9;
+   if(h.k!=='wasp')for(const b of live){if(h.k==='dragonfly'&&!exposed(b))continue;const d=Math.hypot(b.x-h.x,b.y-h.y);if(d<bd&&d<(h.k==='dragonfly'?700:520)){bd=d;tgt=b;}}
+   if(tgt){h.tx=tgt.x;h.ty=tgt.y;}else if(Math.hypot(h.tx-h.x,h.ty-h.y)<20){const c=G.leafy[Math.floor(Math.random()*G.leafy.length)];const pt=leafPoint(c,Math.random);h.tx=pt.x;h.ty=pt.y;}
+   const sp=(h.k==='dragonfly'?420:h.k==='wasp'?300:95)*dt;const dx=h.tx-h.x,dy=h.ty-h.y,d=Math.hypot(dx,dy);
+   if(d>1){const m=Math.min(sp,d);h.x+=dx/d*m;h.y+=dy/d*m;h.ang=Math.atan2(dy,dx)+Math.PI/2;}
+   if(tgt&&bd<28&&h.cd<=0){h.cd=h.k==='dragonfly'?1.1:2;h.strike=.3;damage(tgt,tgt.kind==='boss'?1:(h.k==='dragonfly'?99:1),'helper');floater(tgt.x,tgt.y-30,h.k==='dragonfly'?'SNAP!':'GOTCHA!','#b8f0ff');}
+  }else if(h.k==='mantis'){
+   if(h.cd<=0){let tgt=null,bd=125;for(const b of live){if(b.kind==='boss'||!exposed(b))continue;const d=Math.hypot(b.x-h.x,b.y-h.y);if(d<bd){bd=d;tgt=b;}}
+    if(tgt){h.cd=2.4;h.strike=.35;h.ang=Math.atan2(tgt.y-h.y,tgt.x-h.x)+Math.PI/2;damage(tgt,99,'helper');floater(tgt.x,tgt.y-30,'GRAB!','#c8f59a');}}}
+ }
+ G.helpers=G.helpers.filter(h=>h.t>0||h.k==='mantis'&&h.t>0);
+}
+function drawHelper(g,h,scale){
+ g.save();g.translate(h.x,h.y);if(h.k!=='mantis')g.rotate(h.ang);const k=(scale||1)*Math.max(1.2,13/(10*S));g.scale(k,k);
+ drawHelperShape(g,h.k,G?G.t:0,h.strike||0);g.restore();
+}
+function drawHelperShape(g,k,t,strike){
+ if(k==='dragonfly'){const f=Math.sin(t*50)*.25;g.fillStyle='rgba(220,245,255,.55)';g.strokeStyle='rgba(120,180,220,.9)';g.lineWidth=.8;
+  for(const sd of[-1,1])for(const o of[-1,1]){g.save();g.rotate(sd*(Math.PI/2+o*.18+f*o));g.beginPath();g.ellipse(0,-15,4,15,0,0,TAU);g.fill();g.stroke();g.restore();}
+  g.fillStyle='#1e7fd6';g.beginPath();g.ellipse(0,10,2.6,16,0,0,TAU);g.fill();g.fillStyle='#29a3ff';g.beginPath();g.ellipse(0,-3,4.5,6,0,0,TAU);g.fill();
+  g.fillStyle='#0e5aa0';g.beginPath();g.arc(-3,-9,3.2,0,TAU);g.arc(3,-9,3.2,0,TAU);g.fill();return;}
+ if(k==='mantis'){g.strokeStyle='#5aa83a';g.lineCap='round';g.lineWidth=2.2;g.beginPath();for(const sd of[-1,1]){g.moveTo(sd*3,4);g.lineTo(sd*12,14);g.moveTo(sd*3,10);g.lineTo(sd*12,22);}g.stroke();
+  g.fillStyle='#7cc84e';g.beginPath();g.ellipse(0,14,5,14,0,0,TAU);g.fill();g.beginPath();g.ellipse(0,-6,2.6,10,0,0,TAU);g.fill();
+  g.beginPath();g.moveTo(-6,-18);g.lineTo(6,-18);g.lineTo(0,-10);g.closePath();g.fill();g.fillStyle='#2d5a1a';g.beginPath();g.arc(-5,-18,1.8,0,TAU);g.arc(5,-18,1.8,0,TAU);g.fill();
+  const r=strike>0?-.9:.3;g.strokeStyle='#6dbb44';g.lineWidth=2.6;for(const sd of[-1,1]){g.save();g.translate(sd*2,-10);g.rotate(sd*r);g.beginPath();g.moveTo(0,0);g.lineTo(sd*7,-9);g.lineTo(sd*3,-17);g.stroke();g.restore();}return;}
+ if(k==='assassin'){g.strokeStyle='#3a1a10';g.lineWidth=1.6;g.lineCap='round';g.beginPath();for(const sd of[-1,1])for(let i=0;i<3;i++){const y=-2+i*7;g.moveTo(sd*4,y);g.lineTo(sd*15,y+(i-1)*8+Math.sin(t*14+i)*2);}g.moveTo(-1,-14);g.lineTo(-6,-28);g.moveTo(1,-14);g.lineTo(6,-28);g.stroke();
+  g.fillStyle='#c4562e';g.beginPath();g.ellipse(0,6,6,13,0,0,TAU);g.fill();g.fillStyle='#2a140a';g.beginPath();g.ellipse(0,8,3.5,9,0,0,TAU);g.fill();g.fillStyle='#c4562e';g.beginPath();g.ellipse(0,-10,3,5,0,0,TAU);g.fill();
+  g.strokeStyle='#2a140a';g.lineWidth=1.4;g.beginPath();g.moveTo(0,-14);g.lineTo(0,-19);g.stroke();return;}
+ if(k==='wasp'){const f=Math.abs(Math.sin(t*45));g.fillStyle='rgba(230,240,255,.6)';for(const sd of[-1,1]){g.save();g.rotate(sd*(.6+f*.5));g.beginPath();g.ellipse(sd*6,-2,4,10,0,0,TAU);g.fill();g.restore();}
+  g.fillStyle='#1a1a1a';g.beginPath();g.ellipse(0,6,4,8,0,0,TAU);g.fill();g.beginPath();g.ellipse(0,-4,3,4,0,0,TAU);g.fill();g.beginPath();g.arc(0,-10,3,0,TAU);g.fill();
+  g.strokeStyle='#1a1a1a';g.lineWidth=1;g.beginPath();g.moveTo(-1,-12);g.lineTo(-5,-19);g.moveTo(1,-12);g.lineTo(5,-19);g.stroke();return;}
+}
+function drawTrap(g,tr){
+ const full=tr.caught>=tr.cap;g.save();g.translate(tr.x,tr.y);const k=Math.max(1,12/(10*S));g.scale(k,k);
+ if(tr.k==='sticky'){g.strokeStyle='#7a5a2a';g.lineWidth=3;g.beginPath();g.moveTo(0,10);g.lineTo(0,40);g.stroke();g.fillStyle='#ffe14a';g.strokeStyle='#b39200';g.lineWidth=2;g.fillRect(-20,-24,40,34);g.strokeRect(-20,-24,40,34);
+  g.strokeStyle='rgba(150,120,0,.4)';g.lineWidth=1;for(let i=-16;i<20;i+=8){g.beginPath();g.moveTo(i,-24);g.lineTo(i,10);g.stroke();}}
+ else if(tr.k==='pheromone'){g.strokeStyle='#666';g.lineWidth=2;g.beginPath();g.moveTo(0,-34);g.lineTo(0,-22);g.stroke();g.fillStyle='#5f9a3a';g.beginPath();g.moveTo(-22,8);g.lineTo(0,-24);g.lineTo(22,8);g.closePath();g.fill();
+  g.fillStyle='#a7e07a';g.beginPath();g.arc(0,-6,6,0,TAU);g.fill();g.globalAlpha=.25+.15*Math.sin(G.t*3);g.strokeStyle='#c8ff9a';g.lineWidth=2;for(let r=14;r<40;r+=10){g.beginPath();g.arc(0,-6,r+(G.t*10)%10,0,TAU);g.stroke();}g.globalAlpha=1;}
+ else if(tr.k==='light'){const glow=G.P.bg>=4?1:.5;const gr=g.createRadialGradient(0,-10,2,0,-10,90);gr.addColorStop(0,`rgba(255,250,200,${.65*glow})`);gr.addColorStop(1,'rgba(255,250,200,0)');g.fillStyle=gr;g.beginPath();g.arc(0,-10,90,0,TAU);g.fill();
+  g.strokeStyle='#555';g.lineWidth=3;g.beginPath();g.moveTo(0,0);g.lineTo(0,40);g.stroke();g.fillStyle='#fff8c0';g.beginPath();g.arc(0,-10,11,0,TAU);g.fill();g.strokeStyle='#888';g.lineWidth=1.5;g.beginPath();for(let a=0;a<TAU;a+=TAU/8){g.moveTo(Math.cos(a)*11,-10+Math.sin(a)*11);g.lineTo(Math.cos(a)*15,-10+Math.sin(a)*15);}g.stroke();}
+ else if(tr.k==='cardboard'){g.fillStyle='#b48a52';g.strokeStyle='#7a5a2e';g.lineWidth=2;g.beginPath();g.ellipse(0,0,26,12,0,0,TAU);g.fill();g.stroke();g.fillStyle='#3a2a14';g.beginPath();g.ellipse(-22,0,5,10,0,0,TAU);g.fill();
+  g.strokeStyle='rgba(90,60,30,.5)';g.lineWidth=1;for(let i=-14;i<22;i+=6){g.beginPath();g.moveTo(i,-11);g.lineTo(i+4,11);g.stroke();}}
+ g.fillStyle=full?'#ff5a6a':'#ffffff';g.font='bold 11px sans-serif';g.textAlign='center';g.fillText(tr.caught+'/'+tr.cap,0,tr.k==='sticky'?-28:-36);
+ g.restore();
+}
 function brown(c){if({fruit:1,rose:1,spathe:1,fallen:1,lemon:1,sunhead:1,hibflower:1,puff:1,cob:1}[c.type])return;c.col=shade('#9a7b3c',(Math.random()-.5)*.2);}
 function areaSpray(T,x,y){
- const R={sugar:0,garlic:170,chilli:150,salt:115,bicarb:0}[T];
+ const R={sugar:0,garlic:170,chilli:150,salt:115,bicarb:0,hose:175,neem:155,kaolin:165,pyrethrum:135}[T];
+ if(T==='hose'||T==='neem'||T==='kaolin'||T==='pyrethrum'){newSpray(T,x,y,R);return;}
  if(T==='bicarb'){G.splats.length=0;G.cloudT=0;G.fresh=10;for(let i=0;i<26;i++)particles(x+rand(-110,110),y+rand(-110,110),1,'mist');SFX.mist();toast('Fresh! Bicarb soaks up the stink. You\u2019re stink-proof for 10 seconds.');return;}
  if(T==='sugar'){G.baits.push({x,y,t:6});SFX.pop();
   for(const b of G.bugs){if(b.kind==='boss'||b.kind==='nymph'||!(b.state==='hidden'||b.state==='crawl'))continue;if(Math.hypot(b.x-x,b.y-y)>320)continue;
@@ -795,7 +934,7 @@ function update(dt){
  if(G.soapMax>0)G.soap=Math.min(G.soapMax,G.soap+dt/G.regen*(1+G.weather.rain));
  if(G.sniffCd>0)G.sniffCd-=dt;if(G.sniffT>0)G.sniffT-=dt;
  G.hintT+=dt;
- updFriends(dt);
+ updFriends(dt);updTraps(dt);updHelpers(dt);
  for(let i=G.floaters.length-1;i>=0;i--){G.floaters[i].t+=dt;if(G.floaters[i].t>1.1)G.floaters.splice(i,1);}
  for(let i=G.splats.length-1;i>=0;i--){G.splats[i].t-=dt;if(G.splats[i].t<=0)G.splats.splice(i,1);}
  for(let i=G.baits.length-1;i>=0;i--){G.baits[i].t-=dt;if(G.baits[i].t<=0)G.baits.splice(i,1);}
@@ -803,6 +942,7 @@ function update(dt){
   if(b.flash>0)b.flash-=dt;
   if(b.kind==='boss'&&b.regrow>0&&b.shell<=0&&b.state!=='dead'){b.regrow-=dt;if(b.regrow<=0){b.shell=Math.ceil(b.shellMax/2);toast('The Stink King grew his shell back! Use Oil again.');}}
   if(b.state==='dead'){b.deadT+=dt;if(b.deadT<.9&&Math.random()<.6)particles(b.bx0+b.bvx*b.deadT,b.by0+b.bvy*b.deadT+750*b.deadT*b.deadT,1,'bubble');if(b.deadT>1.5)b.state='gone';continue;}
+  if(b.slow>0)b.slow-=dt;
   if(b.stun>0){b.stun-=dt;if(b.state==='hidden'||b.state==='eat')continue;}
   if(b.state==='eat'){b.eatT-=dt;b.leg+=dt*6;if(b.eatT<=0){b.toBait=false;b.state='hidden';wander(b);}continue;}
   if(b.state==='gone'||b.state==='stinking')continue;
@@ -812,8 +952,8 @@ function update(dt){
    else if(P.wander&&b.kind!=='nymph'&&b.state==='hidden'){b.wT-=dt;if(b.wT<=0){b.wT=P.wander*(.7+Math.random()*.6)*(b.wMul||1);wander(b);}}
    if(b.kind==='scout'){b.flyT-=dt;if(b.flyT<=0){b.flyT=rand(5,8);fly(b);}}
   }else if(b.state==='crawl'){
-   b.leg+=dt*18;const dx=b.tx-b.x,dy=b.ty-b.y,d=Math.hypot(dx,dy),sp=(b.spd||P.speed)*dt;
-   if(d<=sp){b.x=b.tx;b.y=b.ty;if(b.toBait){b.state='eat';b.eatT=4+Math.random()*2;}else{b.state='hidden';b.expT=0;}}else{b.x+=dx/d*sp;b.y+=dy/d*sp;b.ang=Math.atan2(dy,dx)+Math.PI/2;}
+   b.leg+=dt*18;const dx=b.tx-b.x,dy=b.ty-b.y,d=Math.hypot(dx,dy),sp=(b.spd||P.speed)*dt*(b.slow>0?.4:1);
+   if(d<=sp){b.x=b.tx;b.y=b.ty;if(b.toTrap){const tr=b.toTrap;b.toTrap=null;if(tr.caught<tr.cap)trapCatch(tr,b);else{b.state='hidden';wander(b);}}else if(b.toBait){b.state='eat';b.eatT=4+Math.random()*2;}else{b.state='hidden';b.expT=0;}}else{b.x+=dx/d*sp;b.y+=dy/d*sp;b.ang=Math.atan2(dy,dx)+Math.PI/2;}
   }else if(b.state==='fly'){
    b.ft+=dt/b.fdur;const u=Math.min(1,b.ft);const mx=(b.fx+b.tx)/2,my=Math.min(b.fy,b.ty)-170;
    b.x=(1-u)*(1-u)*b.fx+2*(1-u)*u*mx+u*u*b.tx;b.y=(1-u)*(1-u)*b.fy+2*(1-u)*u*my+u*u*b.ty;b.ang+=dt*2;
@@ -919,6 +1059,14 @@ function drawBackground(){
   for(let i=0;i<26;i++){const x=Lx+r2()*Wd,y=Ty+r2()*(880-Ty);g.save();g.translate(x,y);g.rotate(r2()*TAU);g.beginPath();g.ellipse(0,0,90+r2()*90,40+r2()*40,0,0,TAU);g.fill();g.restore();}
   g.fillStyle='rgba(210,255,170,.07)';for(let i=0;i<40;i++){g.beginPath();g.ellipse(Lx+r2()*Wd,Ty+r2()*Hd,20+r2()*40,12+r2()*20,r2(),0,TAU);g.fill();}
   g.fillStyle='#2a2318';g.fillRect(Lx,945,Wd,By-945);g.fillStyle='#3a3020';g.fillRect(Lx,940,Wd,8);
+ }else if(st===5){
+  gr=g.createLinearGradient(0,Ty,0,800);gr.addColorStop(0,'#070b24');gr.addColorStop(.7,'#16224a');gr.addColorStop(1,'#26365e');g.fillStyle=gr;g.fillRect(Lx,Ty,Wd,Hd);
+  const r2=mulberry32(9);g.fillStyle='rgba(255,255,240,.85)';for(let i=0;i<90;i++){g.beginPath();g.arc(Lx+r2()*Wd,Ty+r2()*(560-Ty),r2()*2+.4,0,TAU);g.fill();}
+  g.fillStyle='rgba(255,250,215,.18)';g.beginPath();g.arc(780,230,110,0,TAU);g.fill();g.fillStyle='#fdf6d8';g.beginPath();g.arc(780,230,62,0,TAU);g.fill();g.fillStyle='rgba(200,190,150,.35)';g.beginPath();g.arc(760,215,12,0,TAU);g.arc(800,250,9,0,TAU);g.fill();
+  g.fillStyle='#0d1530';for(let i=0;i<10;i++){const x=Lx+i*Wd/9;g.beginPath();g.arc(x,720,80+(i%3)*35,0,TAU);g.fill();}
+  g.fillStyle='#0a1024';for(let x=Math.floor(Lx/46)*46;x<Rx;x+=46){g.beginPath();g.moveTo(x+4,800);g.lineTo(x+4,640);g.lineTo(x+20,620);g.lineTo(x+36,640);g.lineTo(x+36,800);g.closePath();g.fill();}
+  g.fillRect(Lx,670,Wd,12);g.fillRect(Lx,740,Wd,12);
+  g.fillStyle='#14182a';g.fillRect(Lx,790,Wd,By-790);
  }else{
   gr=g.createLinearGradient(0,Ty,0,780);gr.addColorStop(0,'#1c1a3c');gr.addColorStop(.55,'#4a2f5e');gr.addColorStop(.85,'#c86a55');gr.addColorStop(1,'#f0a35c');g.fillStyle=gr;g.fillRect(Lx,Ty,Wd,Hd);
   const r2=mulberry32(5);g.fillStyle='rgba(255,255,230,.7)';for(let i=0;i<50;i++){g.beginPath();g.arc(Lx+r2()*Wd,Ty+r2()*(380-Ty),r2()*1.8+.4,0,TAU);g.fill();}
@@ -944,10 +1092,32 @@ function drawDecor(g){
    g.fillStyle='#4f3524';g.fillRect(x1-14,y+6,x2-x1+28,h);
    g.strokeStyle='#2f2016';g.lineWidth=3;for(let i=1;i<3;i++){const yy=y+6+i*h/3;g.beginPath();g.moveTo(x1-14,yy);g.lineTo(x2+14,yy);g.stroke();}
    g.fillStyle='#3d281a';g.fillRect(x1-22,y-6,24,h+14);g.fillRect(x2-2,y-6,24,h+14);
-  }else if(d.type==='pole'){g.strokeStyle=G.P.bg===4?'#6e5a3e':'#b8955a';g.lineWidth=8*d.s;g.lineCap='round';g.beginPath();g.moveTo(d.x1,d.y1);g.lineTo(d.x2,d.y2);g.stroke();
-  }else if(d.type==='stake'){g.strokeStyle=G.P.bg===4?'#7a6646':'#c8a66a';g.lineWidth=9*d.s;g.lineCap='round';g.beginPath();g.moveTo(d.x,d.y1);g.lineTo(d.x,d.y2);g.stroke();
+  }else if(d.type==='pole'){g.strokeStyle=G.P.bg>=4?'#6e5a3e':'#b8955a';g.lineWidth=8*d.s;g.lineCap='round';g.beginPath();g.moveTo(d.x1,d.y1);g.lineTo(d.x2,d.y2);g.stroke();
+  }else if(d.type==='stake'){g.strokeStyle=G.P.bg>=4?'#7a6646':'#c8a66a';g.lineWidth=9*d.s;g.lineCap='round';g.beginPath();g.moveTo(d.x,d.y1);g.lineTo(d.x,d.y2);g.stroke();
    g.strokeStyle='rgba(90,60,20,.5)';g.lineWidth=3*d.s;for(let y=d.y1-60*d.s;y>d.y2;y-=90*d.s){g.beginPath();g.moveTo(d.x-5*d.s,y);g.lineTo(d.x+5*d.s,y);g.stroke();}}
  }
+}
+function drawClay(g,c){g.save();g.translate(c.bx,c.by);g.rotate(c.a0+c.off+c.sway);g.globalAlpha=.55;g.fillStyle='#f6f4ee';g.beginPath();g.ellipse(c.len/2,0,c.len/2*.92,c.cw/2*.85,0,0,TAU);g.fill();g.globalAlpha=1;g.restore();}
+function drawBackdrop(g){
+ if(!G.back)return;
+ for(const o of G.back){if(o.t!=='gum')continue;const h=o.y0-o.y1;g.fillStyle=G.P.bg>=4?'#8f8a80':'#d8cdb9';g.beginPath();g.moveTo(o.x-o.w,o.y0);g.quadraticCurveTo(o.x-o.w*.6,o.y1+h*.5,o.x-o.w*.45,o.y1);g.lineTo(o.x+o.w*.45,o.y1);g.quadraticCurveTo(o.x+o.w*.6,o.y1+h*.5,o.x+o.w,o.y0);g.closePath();g.fill();
+  g.fillStyle=G.P.bg>=4?'rgba(60,55,50,.35)':'rgba(150,120,90,.35)';for(let i=0;i<6;i++){g.beginPath();g.ellipse(o.x+((i*37)%17-8),o.y0-h*(.12+i*.14),o.w*.25,h*.04,0,0,TAU);g.fill();}
+  g.strokeStyle=G.P.bg>=4?'#8f8a80':'#d8cdb9';g.lineCap='round';if(o.cl){for(const[cx,cy]of o.cl){g.lineWidth=11;g.beginPath();g.moveTo(o.x,o.y1+40);g.quadraticCurveTo(o.x+(cx-o.x)*.2,cy+30,cx,cy+5);g.stroke();}
+   g.fillStyle=G.P.bg>=4?'#24402c':'#4f7f4a';for(const[cx,cy]of o.cl){g.beginPath();g.ellipse(cx,cy+5,80,58,0,0,TAU);g.fill();}}}
+ {const x0=-3000,x1=4000;g.fillStyle=G.P.outdoor?'#7a5536':'#e9e2d0';g.fillRect(x0,-460,x1-x0,34);g.fillStyle='rgba(0,0,0,.18)';g.fillRect(x0,-430,x1-x0,6);if(G.P.outdoor){g.fillStyle='#7a5536';for(let x=-2900;x<4000;x+=900)g.fillRect(x,-460,30,G.P.ground==='pot'?1380:1300);}}
+ for(const o of G.back){if(o.t!=='hang')continue;const sw=Math.sin((G.t||0)*.6+o.sd)*.03;g.save();g.translate(o.x,o.y);g.rotate(sw);
+  g.strokeStyle='rgba(90,70,50,.55)';g.lineWidth=2;g.beginPath();g.moveTo(-o.r*.8,-o.r*.3);g.lineTo(0,-430-o.y);g.lineTo(o.r*.8,-o.r*.3);g.stroke();
+  for(let i=0;i<o.n;i++){const vx=(i/(o.n-1)-.5)*o.r*1.6,len=o.r*(1.2+((i*37+o.sd*10)%7)/5);g.strokeStyle=shade(o.col,-.15);g.lineWidth=2.5;g.beginPath();g.moveTo(vx,0);g.quadraticCurveTo(vx+Math.sin(i+o.sd)*14,len*.5,vx+Math.sin(i*2+o.sd)*10,len);g.stroke();
+   g.fillStyle=o.col;for(let k=1;k<=4;k++){const t=k/4,lx=vx+Math.sin(i*2+o.sd)*10*t,ly=len*t;g.beginPath();g.ellipse(lx+(k%2?6:-6),ly,8,5,k%2?.6:-.6,0,TAU);g.fill();}}
+  g.fillStyle=o.col;for(let i=0;i<7;i++){const a=Math.PI+(i+.5)/7*Math.PI;g.beginPath();g.ellipse(Math.cos(a)*o.r*.75,-o.r*.25+Math.sin(a)*o.r*.5,o.r*.32,o.r*.18,a,0,TAU);g.fill();}
+  if(o.fl){g.fillStyle=o.fl;for(let i=0;i<5;i++){const a=Math.PI+(i+.5)/5*Math.PI;g.beginPath();g.arc(Math.cos(a)*o.r*.6,-o.r*.2+Math.sin(a)*o.r*.45,5,0,TAU);g.fill();}}
+  g.fillStyle=G.P.outdoor?'#8a5a3a':'#c9784a';g.beginPath();g.moveTo(-o.r,-o.r*.3);g.lineTo(o.r,-o.r*.3);g.quadraticCurveTo(o.r*.9,o.r*.45,0,o.r*.5);g.quadraticCurveTo(-o.r*.9,o.r*.45,-o.r,-o.r*.3);g.fill();
+  g.fillStyle='rgba(0,0,0,.15)';g.fillRect(-o.r,-o.r*.3,o.r*2,5);g.restore();}
+ for(const o of G.back){if(o.t==='tree'){g.fillStyle=shade(o.col,-.35);g.fillRect(o.x-12,o.y-o.h*.55,24,o.h*.55);g.fillStyle=o.col;for(const[dx,dy,k]of[[0,-o.h*.75,1],[-o.r*.6,-o.h*.6,.75],[o.r*.6,-o.h*.6,.75],[0,-o.h*.5,.8]]){g.beginPath();g.arc(o.x+dx,o.y+dy,o.r*k,0,TAU);g.fill();}}}
+ for(const o of G.back){if(o.t==='bush'){g.fillStyle=o.col;g.beginPath();g.arc(o.x,o.y,o.r,Math.PI,0);g.fill();g.beginPath();g.arc(o.x-o.r*.55,o.y+4,o.r*.7,Math.PI,0);g.arc(o.x+o.r*.55,o.y+4,o.r*.7,Math.PI,0);g.fill();
+   if(o.fl){g.fillStyle=o.fl;for(let i=0;i<6;i++){const a=Math.PI+(i+.5)/6*Math.PI;g.beginPath();g.arc(o.x+Math.cos(a)*o.r*.7,o.y+Math.sin(a)*o.r*.7,6,0,TAU);g.fill();}}}
+  else if(o.t==='pot'){g.fillStyle='#a95a35';g.beginPath();g.moveTo(o.x-o.r*.6,o.y-o.r*.5);g.lineTo(o.x+o.r*.6,o.y-o.r*.5);g.lineTo(o.x+o.r*.45,o.y+o.r*.2);g.lineTo(o.x-o.r*.45,o.y+o.r*.2);g.closePath();g.fill();
+   g.fillStyle=o.col;for(let i=0;i<5;i++){const a=-Math.PI/2+(i-2)*.45;g.save();g.translate(o.x,o.y-o.r*.5);g.rotate(a);g.beginPath();g.ellipse(o.r*.55,0,o.r*.55,o.r*.18,0,0,TAU);g.fill();g.restore();}}}
 }
 function drawStems(g){
  g.lineCap='round';g.lineJoin='round';
@@ -1014,7 +1184,7 @@ function drawCover(g,c){
   g.save();path();g.clip();
   g.strokeStyle=shade(col,.18);g.lineWidth=3;g.beginPath();g.moveTo(L*.1,0);g.lineTo(L*.97,0);
   for(let t=.22;t<.9;t+=.13)for(const sd of[-1,1]){g.moveTo(L*t,0);g.quadraticCurveTo(L*(t+.06),sd*h*.35,L*(t+.14),sd*h*.75);}g.stroke();
-  const dark=G.P.bg===4?'#1c1a2a':'#0e2c1c';g.strokeStyle=dark;g.lineWidth=W*.035;
+  const dark=G.P.bg>=4?'#1c1a2a':'#0e2c1c';g.strokeStyle=dark;g.lineWidth=W*.035;
   for(const s of c.slits){const e=h*.9*Math.pow(Math.sin(Math.PI*clamp(s.t,0,1)),.6)*s.side;const x=L*s.t;g.beginPath();g.moveTo(x+L*.04,e*1.15);g.lineTo(x-L*.01,e*(1-s.d));g.stroke();}
   g.fillStyle=dark;for(const ho of c.holes){g.beginPath();g.ellipse(L*ho.t,ho.l*h,W*.045,W*.024,.3,0,TAU);g.fill();}
   g.restore();break;}
@@ -1074,6 +1244,7 @@ function drawBugShape(g,b,flying){
 }
 function drawBug(g,b){g.save();g.translate(b.x,b.y);g.rotate(b.ang+(b.state==='hidden'?Math.sin(G.t*3+b.mott[0][0])*.12:0));if(b.state==='hidden')b.leg+=.04;const k=Math.max(b.r,(b.kind==='nymph'?7:11)/S)/16;g.scale(k,k);drawBugShape(g,b,b.state==='fly');g.restore();}
 function drawDead(g,b){
+ if(b.trapped){const t=b.deadT;g.save();g.globalAlpha=Math.max(0,1-Math.max(0,t-.8)/.7);g.translate(b.bx0,b.by0);g.rotate(b.ang);const k=Math.max(b.r,11/S)/16*(1-t*.3);g.scale(k,-k);drawBugShape(g,b,false);g.restore();return;}
  const t=b.deadT,x=b.bx0+b.bvx*t,y=b.by0+b.bvy*t+750*t*t;const k=Math.max(b.r,11/S)/16*(1+t*.6);
  g.save();g.globalAlpha=Math.max(0,1-Math.max(0,t-.7)/.8);g.translate(x,y);g.rotate(b.ang+b.spin*t);g.scale(k,t>.08?-k:k);drawBugShape(g,b,false);
  g.strokeStyle='rgba(235,252,255,.95)';g.fillStyle='rgba(200,240,250,.35)';g.lineWidth=1.6;for(let i=0;i<5;i++){const a=i*1.26;g.beginPath();g.arc(Math.cos(a)*15,Math.sin(a)*15,4+(i%2)*2,0,TAU);g.fill();g.stroke();}
@@ -1159,18 +1330,21 @@ function render(){
  if(bgC.width>1&&bgC.height>1)g.drawImage(bgC,0,0);if(!G)return;
  if(G.weather.cloud>.01){g.fillStyle=`rgba(70,82,100,${G.weather.cloud*.42})`;g.fillRect(0,0,cv.width,cv.height);}
  g.setTransform(dpr*S,0,0,dpr*S,dpr*OX,dpr*OY);
- drawDecor(g);drawStems(g);
+ drawBackdrop(g);drawDecor(g);drawStems(g);
  for(const b of G.bugs)if(b.state==='hidden'&&b.kind!=='boss')drawBug(g,b);
  if(G.P.bg>=3)for(const c of G.covers)drawShadow(g,c);
  for(const c of G.covers)drawCover(g,c);
+ for(const c of G.covers)if(c.clay)drawClay(g,c);
+ for(const tr of G.traps)drawTrap(g,tr);
  for(const f of G.friends)if(!FLIER[f.kind])drawFriend(g,f);
  for(const bt of G.baits){const a=Math.min(1,bt.t/1.5);g.fillStyle=`rgba(255,255,255,${.75*a})`;g.beginPath();g.ellipse(bt.x,bt.y,34,18,0,0,TAU);g.fill();g.strokeStyle=`rgba(255,230,150,${a})`;g.lineWidth=3;g.stroke();g.fillStyle=`rgba(255,245,200,${a})`;for(let i=0;i<6;i++){g.fillRect(bt.x-18+i*7,bt.y-4+(i%2)*6,4,4);}}
  for(const b of G.bugs)if(b.state==='crawl'||b.state==='eat'||(b.kind==='boss'&&b.state==='hidden'))drawBug(g,b);
  for(const b of G.bugs)if(b.stun>0&&b.state!=='dead'&&b.state!=='gone'){g.save();g.font=`${Math.round(16/S)}px "Lilita One",sans-serif`;g.textAlign='center';g.fillStyle='#ff5a3c';g.fillText('achoo!',b.x,b.y-b.r*1.6-Math.sin(G.t*8)*3);g.restore();}
  for(const b of G.bugs)if(b.kind==='boss'&&b.state!=='dead'&&b.state!=='gone'&&b.state!=='stinking')drawBossBar(g,b);
  for(const f of G.friends)if(FLIER[f.kind])drawFriend(g,f);
+ for(const h of G.helpers)drawHelper(g,h);
  for(const b of G.bugs)if(b.state==='fly')drawBug(g,b);
- if(G.P.bg===4){g.save();g.globalCompositeOperation='multiply';g.fillStyle='rgba(96,74,140,.45)';g.fillRect(-OX/S,-OY/S,cw/S,ch/S);g.restore();
+ if(G.P.bg>=4){g.save();g.globalCompositeOperation='multiply';g.fillStyle=G.P.bg===5?'rgba(52,64,140,.58)':'rgba(96,74,140,.45)';g.fillRect(-OX/S,-OY/S,cw/S,ch/S);g.restore();
   for(const f of G.flies){const a=.45+.45*Math.sin(G.t*2.4+f.p);const gr=g.createRadialGradient(f.x,f.y,0,f.x,f.y,14);gr.addColorStop(0,`rgba(255,250,170,${a})`);gr.addColorStop(1,'rgba(255,250,170,0)');g.fillStyle=gr;g.beginPath();g.arc(f.x,f.y,14,0,TAU);g.fill();}}
  for(const b of G.bugs)if(b.state==='dead')drawDead(g,b);
  for(const b of G.bugs){if(!(b.hpMax>1)||b.kind==='boss'||b.state==='dead'||b.state==='gone'||b.state==='stinking')continue;if(b.state==='hidden'&&covered(b.x,b.y))continue;
@@ -1226,7 +1400,7 @@ function setTxt(id,v){if(hc[id]!==v){hc[id]=v;$(id).textContent=v;}}
 function bugIcon(id,good){
  const c=document.createElement('canvas');c.width=c.height=120;const g=c.getContext('2d');g.translate(60,64);g.scale(2.3,2.3);
  if(good){const f={kind:id,ph:.3,state:'idle',leg:0,gone:false};
-  if(id==='bee')drawBee(g,f);else if(id==='butterfly')drawButterfly(g,f);else if(id==='lacewing')drawLacewing(g,f);
+  if(GOODBUGS[id]&&GOODBUGS[id].helper){g.scale(1.2,1.2);drawHelperShape(g,id,0,0);}else if(id==='bee')drawBee(g,f);else if(id==='butterfly')drawButterfly(g,f);else if(id==='lacewing')drawLacewing(g,f);
   else if(id==='predator')drawBugShape(g,{col:'#a07a50',mott:[[-4,0,1.8],[4,2,1.6],[0,7,1.5],[-5,8,1.2],[5,-3,1.4]],leg:0,sp:'predator',kind:'friend'},false);
   else{g.fillStyle='#1b1714';g.beginPath();g.arc(0,-9,6,0,TAU);g.fill();g.fillStyle='#d8262f';g.beginPath();g.ellipse(0,2,10,11,0,0,TAU);g.fill();g.fillStyle='#1b1714';for(const[x,y,r]of[[-5,-2,2.4],[5,-2,2.4],[-5,6,2.2],[5,6,2.2]]){g.beginPath();g.arc(x,y,r,0,TAU);g.fill();}g.strokeStyle='#1b1714';g.lineWidth=1.2;g.beginPath();g.moveTo(0,-8);g.lineTo(0,13);g.stroke();}
  }else{const D=SPECIES[id];g.scale(D.r>1.2?1.05:.95,D.r>1.2?1.05:.95);drawBugShape(g,{col:D.col[0],mott:[[-4,0,1.6],[4,2,1.4],[0,7,1.3],[-5,8,1.1],[5,-3,1.2]],leg:0,sp:id,kind:'stink'},false);}
@@ -1252,7 +1426,7 @@ function openGuide(){
 function setSpray(t){if(G)G.sprayType=t;refreshSprayBar();}
 function refreshSprayBar(){
  const bar=$('sprayBar');if(!G||G.demo){bar.hidden=true;document.body.classList.remove('has-sprays');return;}
- const keys=['soap',...Object.keys(G.charges).filter(k=>(save.up[k]||0)>0||(k==='oil'&&G.P.boss))];
+ const own=Object.keys(G.charges).filter(k=>(save.up[k]||0)>0||(k==='oil'&&G.P.boss));const ord={spray:0,trap:1,helper:2};own.sort((a,b)=>ord[KIND(a)]-ord[KIND(b)]);const keys=['soap',...own];
  bar.hidden=keys.length<2;document.body.classList.toggle('has-sprays',!bar.hidden);
  if(bar.dataset.keys!==keys.join()){bar.dataset.keys=keys.join();bar.innerHTML='';
   for(const k of keys){const b=document.createElement('button');b.className='sp';b.dataset.k=k;b.innerHTML=`<i style="background:${SPRAYS[k].col}"></i>${SPRAYS[k].name}<b></b>`;b.addEventListener('click',()=>{if(k!=='soap'&&!(G.charges[k]>0))return;setSpray(k);SFX.click();});bar.appendChild(b);}}
@@ -1311,12 +1485,14 @@ function modal(title,body,buttons,read){
  show('scr-modal');setTimeout(()=>{const f=box.querySelector('.primary')||box.firstChild;if(f)f.focus({preventScroll:true});},30);
 }
 function toMenu(){
- G=buildLevel(Math.min(save.max,200),true);fitView();hud.hidden=true;refreshSprayBar();
- const n=Math.min(save.max,200);$('mPlay').textContent=save.max>200?'Replay level 200':(n===1?'Play':'Play level '+n);
+ G=buildLevel(Math.min(save.max,MAXLV),true);fitView();hud.hidden=true;refreshSprayBar();
+ const n=Math.min(save.max,MAXLV);$('mPlay').textContent=save.max>MAXLV?'Replay level '+MAXLV:(n===1?'Play':'Play level '+n);
  $('mBubbles').textContent=save.bubbles;$('mSound').textContent='Sound: '+(save.mute?'off':'on');$('mVoice').textContent='Read aloud: '+(save.voice?'on':'off');$('mVoice').hidden=!('speechSynthesis' in window);refreshVoiceBtn();show('scr-menu');
 }
 const INTRO={
  1:{title:'Find the stink bugs',body:'<ol class="howto"><li><b>1</b>Swipe across leaves to push them aside.</li><li><b>2</b>Tap a bug to spray it with soapy water.</li><li><b>3</b>Soak every bug to save the plant.</li></ol><p>Stink bugs crawl between leaves. Spray them while they are out in the open!</p><p><b>Do not spray the ladybird.</b> She is a good bug. Spraying a good bug costs one of your 3 lives.</p>'},
+ 201:{title:'Night Garden',body:'<p>The sun has set. Stink bugs swarm in the moonlight, and they fly towards lights. A Light Trap is your best friend here!</p>'},
+ 301:{title:'Mega Garden',body:'<p>The biggest gardens and the toughest bugs. Mix sprays, traps and garden helpers to win.</p>'},
  12:{title:'Tough bugs',body:'<p>Some bugs are tougher now and need more than one spray. Red dots above a bug show how many sprays it has left. Hit it again before it runs away!</p>'},
  10:{title:'Boss: the Stink King',body:'<p>Every 10th level the Stink King appears. His orange shell blocks soap.</p><ol class="howto"><li><b>1</b>Pick <b>Oil</b> in the spray bar (bottom left) and spray him to crack the shell. Boss levels always give you some oil.</li><li><b>2</b>Switch to <b>Soap</b> and soak him until he pops.</li></ol><p>From level 100 his shell grows back if you are too slow!</p>'},
  10:{title:'Two plants',body:'<p>More plants means more places to hide. Check them all.</p>'},
@@ -1328,7 +1504,7 @@ const INTRO={
  150:{title:'The Swarm at dusk',body:'<p>It\'s dark and windy now. Tiny red nymphs hide together in clusters. Mist Mode is perfect for them.</p>'},
 };
 function startLevel(lev){
- lev=clamp(lev,1,200);G=buildLevel(lev,false);fitView();hideScreens();setupHUD();
+ lev=clamp(lev,1,MAXLV);G=buildLevel(lev,false);fitView();hideScreens();setupHUD();
  if(G.P.outdoor)setTimeout(()=>{if(G&&G.lev===lev)toast(WXMSG[G.weather.kind]);},400);
  const queue=[];if(INTRO[lev]&&!save.seen[lev])queue.push([lev,INTRO[lev]]);
  const found=new Set(G.bugs.filter(b=>b.sp).map(b=>b.sp));for(const f of G.friends)found.add('good:'+f.kind);
@@ -1353,7 +1529,7 @@ function pause(){
 function onWin(){let winSay='';
  const lev=G.lev;let stars=G.lives;if(G.misses>Math.max(4,G.P.bugs))stars--;stars=clamp(stars,1,3);
  const prev=save.stars[lev]||0;const earn=prev===0?stars*10+G.P.st*2+(G.P.boss?25:0):Math.max(0,stars-prev)*10+3;
- save.stars[lev]=Math.max(prev,stars);save.bubbles+=earn;const oldMax=save.max;save.max=Math.max(save.max,Math.min(201,lev+1));persist();
+ save.stars[lev]=Math.max(prev,stars);save.bubbles+=earn;const oldMax=save.max;save.max=Math.max(save.max,Math.min(MAXLV+1,lev+1));persist();
  const newTools=UPG.filter(u=>u.unlock<=save.max&&u.unlock>oldMax).map(u=>u.name);
  SFX.win();G.paused=true;
  let body=`<div class="stars">${starSVG(stars>=1)}${starSVG(stars>=2)}${starSVG(stars>=3)}</div><div class="earn"><span class="bubbles">${bubSVG}<b>+${earn}</b>&nbsp;bubbles</span></div>`;
@@ -1362,12 +1538,12 @@ function onWin(){let winSay='';
  if(newTools.length)body+=`<div class="note">New in the Soap Shop: ${newTools.join(', ')}</div>`;
  if(stars<3){const why=[];if(G.stinks)why.push('beat the timer');if(G.ladyHits)why.push('leave the good bugs alone');if(G.misses>Math.max(4,G.P.bugs))why.push('miss fewer sprays');if(why.length)body+=`<p>For 3 stars: ${why.join(', ')}.</p>`;}
  const btns=[];
- if(lev<200)btns.push({label:'Next level',primary:true,fn:()=>startLevel(lev+1)});
- else body+='<p>You cleared all 200 levels. The garden is safe!</p>';
+ if(lev<MAXLV)btns.push({label:'Next level',primary:true,fn:()=>startLevel(lev+1)});
+ else body+='<p>You cleared all '+MAXLV+' levels. The garden is safe!</p>';
  btns.push({label:'Replay',fn:()=>startLevel(lev)});
  if(newTools.length)btns.push({label:'Soap Shop',fn:openShop});
  btns.push({label:'Menu',fn:toMenu});
- modal(lev===200?'Champion gardener!':'Garden saved!',body,btns,false);if(winSay)setTimeout(()=>{if(!$('scr-modal').hidden)speak((lev===200?'Champion gardener! ':'Garden saved! ')+winSay);},700);$('mRead').hidden=!canSpeak()||!winSay;$('mRead').onclick=()=>speak(winSay);
+ modal(lev===MAXLV?'Champion gardener!':'Garden saved!',body,btns,false);if(winSay)setTimeout(()=>{if(!$('scr-modal').hidden)speak((lev===MAXLV?'Champion gardener! ':'Garden saved! ')+winSay);},700);$('mRead').hidden=!canSpeak()||!winSay;$('mRead').onclick=()=>speak(winSay);
 }
 function onFail(){
  SFX.fail();G.paused=true;const lev=G.lev;const left=alive().length;
@@ -1377,12 +1553,12 @@ function onFail(){
 
 /* Level select */
 let selStage=1;
-function openLevels(){selStage=params(Math.min(save.max,200)).st;renderLevels();show('scr-levels');}
+function openLevels(){const lv=Math.min(save.max,MAXLV);selStage=(STAGES.find(s=>lv>=s.range[0]&&lv<=s.range[1])||STAGES[0]).n;renderLevels();show('scr-levels');}
 function renderLevels(){
  const tabs=$('stageTabs');tabs.innerHTML='';
  STAGES.forEach(s=>{const b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');b.setAttribute('aria-selected',String(s.n===selStage));b.textContent=s.name;b.addEventListener('click',()=>{selStage=s.n;renderLevels();});tabs.appendChild(b);});
  const S0=STAGES[selStage-1];$('stageNote').textContent=`Levels ${S0.range[0]}–${S0.range[1]}. ${S0.note}`;
- const grid=$('lvGrid');grid.innerHTML='';const cur=Math.min(save.max,200);
+ const grid=$('lvGrid');grid.innerHTML='';const cur=Math.min(save.max,MAXLV);
  for(let l=S0.range[0];l<=S0.range[1];l++){const b=document.createElement('button');b.className='lv'+(l%10===0&&l>=10?' boss':'')+(l===cur?' cur':'');
   const locked=l>save.max&&!save.parent;b.disabled=locked;const st=save.stars[l]||0;
   b.innerHTML=`${l}<small>${locked?'':'★'.repeat(st)+'<span class="off">'+'★'.repeat(3-st)+'</span>'}</small>`;
@@ -1400,7 +1576,8 @@ $('lvBack').addEventListener('click',toMenu);
 function openShop(){renderShop();show('scr-shop');}
 function renderShop(){
  $('shopBubbles').textContent=save.bubbles;const list=$('shopList');list.innerHTML='';
- UPG.forEach(u=>{const tier=save.up[u.id],maxT=u.prices.length,unlocked=save.max>=u.unlock||save.parent;
+ const grp=u=>u.helper?'Garden helpers':u.trap?'Traps':u.spray?'Sprays':'Upgrades';let lastG='';
+ UPG.slice().sort((a,b)=>['Upgrades','Sprays','Traps','Garden helpers'].indexOf(grp(a))-['Upgrades','Sprays','Traps','Garden helpers'].indexOf(grp(b))||a.unlock-b.unlock).forEach(u=>{if(grp(u)!==lastG){lastG=grp(u);const h=document.createElement('h4');h.className='gh';h.textContent=lastG;list.appendChild(h);}const tier=save.up[u.id]||0,maxT=u.prices.length,unlocked=save.max>=u.unlock||save.parent;
   const row=document.createElement('div');row.className='up'+(unlocked?'':' locked');
   const pips=Array.from({length:maxT},(_,i)=>`<i class="${i<tier?'on':''}"></i>`).join('');
   row.innerHTML=`<div class="ic">${u.icon}</div><div style="min-width:0"><h3>${u.name}</h3><p>${u.desc}</p><div class="meta"><span class="pips">${pips}</span>${tier?u.tiers[tier-1]:'Not owned yet'}</div></div>`;
@@ -1414,7 +1591,7 @@ function renderShop(){
 $('shopBack').addEventListener('click',toMenu);
 
 /* Menu */
-$('mPlay').addEventListener('click',()=>{audio();startLevel(Math.min(save.max,200));});
+$('mPlay').addEventListener('click',()=>{audio();startLevel(Math.min(save.max,MAXLV));});
 $('mLevels').addEventListener('click',()=>{audio();openLevels();});
 $('mGuide').addEventListener('click',()=>{audio();openGuide();});
 $('mShop').addEventListener('click',()=>{audio();openShop();});
