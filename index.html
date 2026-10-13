@@ -229,6 +229,8 @@ body.has-sprays .tools{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
         <span class="bubbles"><svg viewBox="0 0 20 20" fill="none" stroke="#9feaf3" stroke-width="2"><circle cx="8" cy="11" r="6"/><circle cx="15" cy="5" r="3"/></svg><b id="mBubbles">0</b> bubbles</span>
         <button class="link" id="mSound">Sound: on</button>
         <button class="link" id="mVoice">Read aloud: on</button>
+        <button class="link" id="mVoiceName" hidden>Voice</button>
+        <button class="link" id="mRate" hidden>Reading speed: fast</button>
       </div>
     </div>
   </section>
@@ -274,7 +276,7 @@ const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 
 /* ---------------- Save ---------------- */
 const KEY='soapVsStink.v1';
-const DEF={voice:true,max:1,stars:{},bubbles:0,guide:{},up:{nozzle:0,sniffer:0,tank:0,suds:0,mint:0,mist:0,oil:0,vinegar:0,sugar:0,garlic:0,chilli:0,salt:0,bicarb:0},mute:false,seen:{},parent:false};
+const DEF={voice:true,rate:'fast',voiceName:'',max:1,stars:{},bubbles:0,guide:{},up:{nozzle:0,sniffer:0,tank:0,suds:0,mint:0,mist:0,oil:0,vinegar:0,sugar:0,garlic:0,chilli:0,salt:0,bicarb:0},mute:false,seen:{},parent:false};
 let save=load();
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')return Object.assign({},DEF,s,{guide:s.guide||{},up:Object.assign({},DEF.up,s.up||{}),stars:s.stars||{},seen:s.seen||{}});}catch(e){}return JSON.parse(JSON.stringify(DEF));}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){}}
@@ -1286,11 +1288,20 @@ const starSVG=on=>`<svg viewBox="0 0 24 24" class="${on?'':'off'}"><path d="M12 
 const bubSVG='<svg viewBox="0 0 20 20" fill="none" stroke="#9feaf3" stroke-width="2"><circle cx="8" cy="11" r="6"/><circle cx="15" cy="5" r="3"/></svg>';
 /* Read-aloud using the device's built-in voice */
 let voicePick=null;
-function pickVoice(){try{const vs=speechSynthesis.getVoices();if(!vs.length)return null;const pref=['en-AU','en-GB','en-NZ','en-US','en'];for(const l of pref){const v=vs.find(v=>v.lang&&v.lang.replace('_','-').startsWith(l)&&/female|karen|catherine|samantha|serena|kate/i.test(v.name))||vs.find(v=>v.lang&&v.lang.replace('_','-').startsWith(l));if(v)return v;}return vs[0];}catch(e){return null;}}
-try{if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=()=>{voicePick=pickVoice();};}catch(e){}
+function auVoices(){try{const vs=speechSynthesis.getVoices()||[];const norm=v=>(v.lang||'').replace('_','-').toLowerCase();
+ const score=v=>{const l=norm(v),n=v.name.toLowerCase();let sc=0;if(l==='en-au')sc+=100;else if(l.startsWith('en-nz'))sc+=40;else if(l.startsWith('en-gb'))sc+=30;else if(l.startsWith('en'))sc+=10;else return -1;
+  if(/premium|enhanced|natural|neural/.test(n))sc+=20;if(/karen|lee|catherine|gordon|natasha|william/.test(n))sc+=8;if(v.localService)sc+=2;return sc;};
+ return vs.map(v=>({v,sc:score(v)})).filter(o=>o.sc>=0).sort((a,b)=>b.sc-a.sc).map(o=>o.v);}catch(e){return [];}}
+function pickVoice(){const list=auVoices();if(!list.length)return null;if(save.voiceName){const m=list.find(v=>v.name===save.voiceName);if(m)return m;}return list[0];}
+try{if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=()=>{voicePick=pickVoice();refreshVoiceBtn&&refreshVoiceBtn();};speechSynthesis.getVoices();}}catch(e){}
 function canSpeak(){return save.voice&&('speechSynthesis' in window)&&typeof SpeechSynthesisUtterance!=='undefined';}
 function stopSpeak(){try{if('speechSynthesis' in window)speechSynthesis.cancel();}catch(e){}}
-function speak(text){if(!canSpeak()||!text)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace(/\s+/g,' ').trim());voicePick=voicePick||pickVoice();if(voicePick)u.voice=voicePick;u.lang=(voicePick&&voicePick.lang)||'en-AU';u.rate=.92;u.pitch=1.08;speechSynthesis.speak(u);}catch(e){}}
+const RATES={normal:1.0,fast:1.15,faster:1.3};
+function speak(text){if(!canSpeak()||!text)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace(/\s+/g,' ').trim());
+ if(!voicePick||((voicePick.lang||'').toLowerCase().replace('_','-')!=='en-au'))voicePick=pickVoice();
+ u.lang=(voicePick&&voicePick.lang)||'en-AU';if(voicePick){try{u.voice=voicePick;}catch(e){}}u.rate=RATES[save.rate]||1.15;u.pitch=1.05;speechSynthesis.speak(u);}catch(e){}}
+function voiceLabel(v){if(!v)return 'Australian';const l=(v.lang||'').replace('_','-');const where=/au$/i.test(l)?'Aussie':/nz$/i.test(l)?'Kiwi':/gb$/i.test(l)?'British':'English';return where+' ('+v.name.replace(/\s*\(.*\)$/,'')+')';}
+function refreshVoiceBtn(){const b=document.getElementById('mVoiceName');if(!b)return;const v=pickVoice();b.textContent='Voice: '+voiceLabel(v);b.hidden=!('speechSynthesis' in window)||!save.voice;const r=document.getElementById('mRate');if(r){r.textContent='Reading speed: '+({normal:'normal',fast:'fast',faster:'faster'}[save.rate]||'fast');r.hidden=b.hidden;}}
 function sayText(root){const parts=[];const walk=el=>{if(el.dataset&&el.dataset.say!==undefined){parts.push(el.dataset.say);return;}if(el.nodeType===3){parts.push(el.textContent);return;}if(el.matches&&el.matches('[data-nosay],img,svg'))return;const block=el.matches&&el.matches('p,li,h2,h3,div,b');for(const c of el.childNodes)walk(c);if(block)parts.push('. ');};walk(root);return parts.join(' ').replace(/(\.\s*){2,}/g,'. ').replace(/\s+\./g,'.');}
 function modal(title,body,buttons,read){
  stopSpeak();$('mTitle').textContent=title;$('mBody').innerHTML=body;const box=$('mBtns');box.innerHTML='';
@@ -1302,7 +1313,7 @@ function modal(title,body,buttons,read){
 function toMenu(){
  G=buildLevel(Math.min(save.max,200),true);fitView();hud.hidden=true;refreshSprayBar();
  const n=Math.min(save.max,200);$('mPlay').textContent=save.max>200?'Replay level 200':(n===1?'Play':'Play level '+n);
- $('mBubbles').textContent=save.bubbles;$('mSound').textContent='Sound: '+(save.mute?'off':'on');$('mVoice').textContent='Read aloud: '+(save.voice?'on':'off');$('mVoice').hidden=!('speechSynthesis' in window);show('scr-menu');
+ $('mBubbles').textContent=save.bubbles;$('mSound').textContent='Sound: '+(save.mute?'off':'on');$('mVoice').textContent='Read aloud: '+(save.voice?'on':'off');$('mVoice').hidden=!('speechSynthesis' in window);refreshVoiceBtn();show('scr-menu');
 }
 const INTRO={
  1:{title:'Find the stink bugs',body:'<ol class="howto"><li><b>1</b>Swipe across leaves to push them aside.</li><li><b>2</b>Tap a bug to spray it with soapy water.</li><li><b>3</b>Soak every bug to save the plant.</li></ol><p>Stink bugs crawl between leaves. Spray them while they are out in the open!</p><p><b>Do not spray the ladybird.</b> She is a good bug. Spraying a good bug costs one of your 3 lives.</p>'},
@@ -1407,7 +1418,9 @@ $('mPlay').addEventListener('click',()=>{audio();startLevel(Math.min(save.max,20
 $('mLevels').addEventListener('click',()=>{audio();openLevels();});
 $('mGuide').addEventListener('click',()=>{audio();openGuide();});
 $('mShop').addEventListener('click',()=>{audio();openShop();});
-$('mVoice').addEventListener('click',()=>{save.voice=!save.voice;persist();$('mVoice').textContent='Read aloud: '+(save.voice?'on':'off');if(save.voice)speak('Read aloud is on.');else stopSpeak();});
+$('mVoice').addEventListener('click',()=>{save.voice=!save.voice;persist();$('mVoice').textContent='Read aloud: '+(save.voice?'on':'off');refreshVoiceBtn();if(save.voice)speak('Read aloud is on.');else stopSpeak();});
+$('mVoiceName').addEventListener('click',()=>{const list=auVoices();if(!list.length){toast('No voices found on this device.');return;}const cur=pickVoice();const i=Math.max(0,list.indexOf(cur));const nx=list[(i+1)%Math.min(list.length,8)];save.voiceName=nx.name;persist();voicePick=nx;refreshVoiceBtn();speak('G\'day! Let\'s find those stink bugs.');});
+$('mRate').addEventListener('click',()=>{const order=['normal','fast','faster'];save.rate=order[(order.indexOf(save.rate)+1)%3];persist();refreshVoiceBtn();speak('This is how fast I will read.');});
 $('mSound').addEventListener('click',()=>{save.mute=!save.mute;persist();$('mSound').textContent='Sound: '+(save.mute?'off':'on');if(!save.mute)audio();});
 
 window.__svs={startLevel,buildLevel,params,update,tap,push,render,onWin,onFail,setG:v=>{G=v;},getG:()=>G};
